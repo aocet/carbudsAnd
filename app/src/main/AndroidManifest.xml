@@ -56,7 +56,9 @@
         <activity
             android:name=".StartSelectionActivity"
             android:label="@string/title_activity_selection" />
-        <activity android:name=".MatchmakingActivity" />
+        <activity android:name=".MatchmakingActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
