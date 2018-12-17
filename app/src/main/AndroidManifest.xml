@@ -70,6 +70,8 @@
         <activity android:name=".ChatActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity android:name=".InitialHitchhikerProfileActivity"/>
+        <activity android:name=".InitialDriverProfileActivity"/>
     </application>
 
 </manifest>

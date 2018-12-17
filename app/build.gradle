@@ -27,10 +27,6 @@ android {
             path "CMakeLists.txt"
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
 }
 
 dependencies {
@@ -49,5 +45,7 @@ dependencies {
     //noinspection GradleDynamicVersion
     implementation 'com.google.maps.android:android-maps-utils:0.3+'
     implementation 'com.google.android.gms:play-services-places:16.0.0'
+    implementation('de.hdodenhof:circleimageview:2.1.0')
+    implementation "com.hootsuite.android:nachos:1.1.1"
 
 }

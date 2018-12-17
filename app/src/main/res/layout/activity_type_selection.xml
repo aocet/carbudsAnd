@@ -41,4 +41,26 @@
         android:text="Matches"
         app:layout_constraintTop_toBottomOf="@+id/settingsButton"
         tools:layout_editor_absoluteX="162dp" />
+
+    <Button
+        android:id="@+id/init_driver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:text="Init Driver"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/init_hitch"
+        app:layout_constraintTop_toBottomOf="@+id/matchButton" />
+
+    <Button
+        android:id="@+id/init_hitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Init Hitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/matchButton" />
 </android.support.constraint.ConstraintLayout>
