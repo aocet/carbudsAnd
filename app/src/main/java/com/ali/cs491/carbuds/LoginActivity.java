@@ -61,7 +61,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         readShared();
         if(user_id != -1){
-            Intent intent = new Intent(LoginActivity.this,TypeSelectionActivity.class);
+            Intent intent = new Intent(LoginActivity.this,RoleSelectionActivity.class);
             startActivity(intent);
         }
         setContentView(R.layout.activity_login);
@@ -114,11 +114,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
-    public void writeShared(String token, int user_id){
+    public void writeShared(String token, int user_id, String name){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString("token", token);
         editor.putInt("user_id", user_id);
+        editor.putString("name", name);
         editor.commit();
     }
     public void readShared(){
@@ -308,7 +309,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 try {
                     token = jsonObj.getString("token");
                     user_id = jsonObj.getInt("user_id");
-                    writeShared(token, user_id);
+                    String user_name = jsonObj.getString("name");
+                    writeShared(token, user_id, user_name);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -322,7 +324,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                Intent intent = new Intent(LoginActivity.this,TypeSelectionActivity.class);
+                Intent intent = new Intent(LoginActivity.this,RoleSelectionActivity.class);
                 startActivity(intent);
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));

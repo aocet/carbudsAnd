@@ -7,22 +7,15 @@
     tools:context=".TypeSelectionActivity">
 
     <Button
-        android:id="@+id/carOwnerButton"
+        android:id="@+id/setTripButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Car Owner"
+        android:text="Set Trip"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="148dp" />
 
-    <Button
-        android:id="@+id/hitchhikerButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="69dp"
-        android:text="Hitchhiker"
-        app:layout_constraintTop_toBottomOf="@+id/carOwnerButton"
-        tools:layout_editor_absoluteX="148dp" />
+
 
     <Button
         android:id="@+id/settingsButton"
@@ -30,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:text="Settings"
-        app:layout_constraintTop_toBottomOf="@+id/hitchhikerButton"
+        app:layout_constraintTop_toBottomOf="@+id/setTripButton"
         tools:layout_editor_absoluteX="161dp" />
 
     <Button

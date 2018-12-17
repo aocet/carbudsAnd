@@ -51,7 +51,7 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCb4kimmN24wdldQBjMDMZWbW2m1NlHkG4" />
+            android:value="AIzaSyBhWJgRmMZum5qBnjGA7HoaY_vpmyzMxe0" />
 
         <activity
             android:name=".StartSelectionActivity"
@@ -67,11 +67,12 @@
         </activity>
         <activity android:name=".DatePickerActivity" />
         <activity android:name=".MatchListActivity" />
-        <activity android:name=".ChatActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".InitialHitchhikerProfileActivity"/>
-        <activity android:name=".InitialDriverProfileActivity"/>
+        <activity
+            android:name=".ChatActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".InitialHitchhikerProfileActivity" />
+        <activity android:name=".InitialDriverProfileActivity" />
+        <activity android:name=".RoleSelectionActivity"></activity>
     </application>
 
 </manifest>

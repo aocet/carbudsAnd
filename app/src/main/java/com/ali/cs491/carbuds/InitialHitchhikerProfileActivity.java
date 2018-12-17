@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.hootsuite.nachos.NachoTextView;
 
@@ -30,12 +31,14 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
 
     private Spinner genderPreferenceSpinner;
     private NachoTextView musicPreferenceSpinner;
+    private TextView userNameView;
 
     private View formView;
     private View progressView;
 
     private static int user_id;
-    public static String token;
+    private static String token;
+    private static String user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
         });
 
         readShared();
+        userNameView = findViewById(R.id.name);
+        userNameView.setText(user_name);
 
     }
 
@@ -148,17 +153,17 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
 
     }
 
-    public void writeShared(String token, int user_id){
+    public void writeShared(String profile_type){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putString("token", token);
-        editor.putInt("user_id", user_id);
+        editor.putString("type", profile_type);
         editor.commit();
     }
     public void readShared(){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
         user_id = sharedPref.getInt("user_id", -1);
         token = sharedPref.getString("token", "");
+        user_name = sharedPref.getString("name", "");
     }
 
 
@@ -196,7 +201,7 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
 
             String msg = setupURLConnection();
             Log.i("Carbuds",msg);
-            if(msg.equals("False")){
+            if(msg.equals("false\n")){
                 return false;
             } else {
                 return true;
@@ -210,6 +215,7 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
+                writeShared("hitchhiker");
                 Intent intent = new Intent(InitialHitchhikerProfileActivity.this,TypeSelectionActivity.class);
                 startActivity(intent);
             }
