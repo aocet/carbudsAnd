@@ -1,8 +1,6 @@
 package com.ali.cs491.carbuds;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,8 +18,8 @@ import java.util.List;
 
 public class MatchListActivity extends AppCompatActivity {
 
-    int USER_ID;
-    String TOKEN;
+    int USER_ID = LoginActivity.user_id;
+    String TOKEN = LoginActivity.token;
     private MatchListTask mMatchTask = null;
 
     List<ChatListUser> users = new ArrayList<ChatListUser>();
@@ -49,9 +47,12 @@ public class MatchListActivity extends AppCompatActivity {
                 intent.putExtra("matchId", us.getMatchId());
                 intent.putExtra("name", us.getName());
                 intent.putExtra("exchange", us.getExchange());
-                intent.putExtra("surname", us.getUsername());
+                intent.putExtra("surname", us.getSurname());
                 intent.putExtra("queue", us.getQueue());
                 intent.putExtra("intersectionPolyline", us.getIntersectionPolyline());
+                intent.putExtra("tripStartTime", us.getTripStart());
+                intent.putExtra("startPoint", us.getStartPoint());
+                intent.putExtra("endPoint", us.getEndPoint());
                 MatchListActivity.this.startActivity(intent);
             }
 
@@ -63,7 +64,6 @@ public class MatchListActivity extends AppCompatActivity {
         private final int userId;
 
         MatchListTask() {
-            readShared();
             this.userId = USER_ID;
         }
         private String setupURLConnection(){
@@ -102,9 +102,12 @@ public class MatchListActivity extends AppCompatActivity {
                             jsonobject.getString("driver_lastname") :
                             jsonobject.getString("hitchhiker_lastname"));
                     String exchange = jsonobject.getString("exchange_name");
+                    String tripStartTime = jsonobject.getString("trip_start_time");
+                    String startPoint = jsonobject.getString("start_point");
+                    String endPoint = jsonobject.getString("end_point");
                     users.add(new ChatListUser(USER_ID, matchId, name, lastName,
-                            exchange, queue,
-                            intersectionPolyline));
+                            exchange, queue, intersectionPolyline, tripStartTime,
+                            startPoint, endPoint));
                 }
 
             } catch (JSONException e) {
@@ -131,10 +134,5 @@ public class MatchListActivity extends AppCompatActivity {
         protected void onCancelled() {
             mMatchTask = null;
         }
-    }
-    public void readShared(){
-        SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
-        TOKEN = sharedPref.getString("token", "");
-        USER_ID = sharedPref.getInt("user_id", -1);
     }
 }

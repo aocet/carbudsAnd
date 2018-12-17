@@ -8,8 +8,13 @@ public class ChatListUser {
     private String exchange;
     private String queue;
     private String intersectionPolyline;
+    private String tripStart;
+    private String startPoint;
+    private String endPoint;
 
-    public ChatListUser(int id, int matchId, String name, String surname, String exchange, String queue, String intersectionPolyline) {
+    public ChatListUser(int id, int matchId, String name, String surname, String exchange,
+                        String queue, String intersectionPolyline,
+                        String tripStart, String startPoint, String endPoint) {
         this.id = id;
         this.matchId = matchId;
         this.name = name;
@@ -17,6 +22,41 @@ public class ChatListUser {
         this.exchange = exchange;
         this.queue = queue;
         this.intersectionPolyline = intersectionPolyline;
+        this.tripStart = tripStart;
+        this.startPoint = startPoint;
+        this.endPoint = endPoint;
+    }
+
+    public String getStartPoint() {
+        return startPoint;
+    }
+
+    public void setStartPoint(String startPoint) {
+        this.startPoint = startPoint;
+    }
+
+    public String getEndPoint() {
+        return endPoint;
+    }
+
+    public void setEndPoint(String endPoint) {
+        this.endPoint = endPoint;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getTripStart() {
+        return tripStart;
+    }
+
+    public void setTripStart(String trip_start) {
+        this.tripStart = trip_start;
     }
 
     public int getId() {
@@ -33,14 +73,6 @@ public class ChatListUser {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getUsername() {
-        return surname;
-    }
-
-    public void setUsername(String username) {
-        this.surname = username;
     }
 
     public String getExchange() {

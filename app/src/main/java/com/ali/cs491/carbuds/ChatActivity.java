@@ -39,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private String EXCHANGE_NAME = "";
     private String message = "";
     private String name = "";
-    private int USER_ID;
+    private int USER_ID = LoginActivity.user_id;
     DbHelper mDbHelper;
     Handler handler = new Handler();
     String bodyOfMessage = "";
@@ -61,7 +61,6 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        readShared();
         Intent intent = getIntent();
 
         int id = intent.getIntExtra("user_id", -1);
@@ -71,6 +70,9 @@ public class ChatActivity extends AppCompatActivity {
         String exchange = intent.getStringExtra("exchange");
         String queue = intent.getStringExtra("queue");
         String intersectionPolyline = intent.getStringExtra("intersectionPolyline");
+        String tripStartTime = intent.getStringExtra("tripStartTime");
+        String startPoint = intent.getStringExtra("startPoint");
+        String endPoint = intent.getStringExtra("endPoint");
 
         EXCHANGE_NAME = exchange;
         QUEUE_NAME = queue;
@@ -176,15 +178,20 @@ public class ChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), InfoMatchActivity.class);
-                view.getContext().startActivity(intent);}
+                intent.putExtra("user_id", id);
+                intent.putExtra("matchId", match_id);
+                intent.putExtra("name", name);
+                intent.putExtra("exchange", exchange);
+                intent.putExtra("surname", surName);
+                intent.putExtra("queue", queue);
+                intent.putExtra("intersectionPolyline", intersectionPolyline);
+                intent.putExtra("tripStartTime", tripStartTime);
+                intent.putExtra("startPoint", startPoint);
+                intent.putExtra("endPoint", endPoint);
+                startActivity(intent);}
         });
 
 
-    }
-
-    private void readShared(){
-        SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
-        USER_ID = sharedPref.getInt("user_id", -1);
     }
 
 
