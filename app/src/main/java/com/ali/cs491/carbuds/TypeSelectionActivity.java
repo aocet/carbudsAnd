@@ -49,7 +49,7 @@ public class TypeSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(TypeSelectionActivity.this, MatchList.class);
+                Intent intent = new Intent(TypeSelectionActivity.this, MatchListActivity.class);
                 startActivity(intent);
             }
         });

@@ -18,7 +18,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MatchList extends AppCompatActivity {
+public class MatchListActivity extends AppCompatActivity {
 
     int USER_ID;
     String TOKEN;
@@ -37,17 +37,13 @@ public class MatchList extends AppCompatActivity {
 
         mMatchTask = new MatchListTask();
         mMatchTask.execute((Void) null);
-        users.add(new ChatListUser(13, 4, "hitch_test", "hitch_test",
-                "chatroom_5", "amq.gen-TiSGJcs8tHee8rXc41MTRg",
-                "qdjrFuh{fEw@BqBBeD?}@@s@Bm@B?ACAIAGDABA@iBJmDd@uAJu@?e@?EAEAC?A?iAg@uAq@]YkAyAcBkBkBaBwBeB{C_CcAcAmAwAo@aASi@]uA@G?EAGEOGEG_@_A}BYgA}DaO"));
-        mMessageListAdapter.notifyDataSetChanged();
 
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView parentView, View childView,
                                     int position, long id)
             {
-                Intent intent = new Intent(MatchList.this, MainActivity.class);
+                Intent intent = new Intent(MatchListActivity.this, ChatActivity.class);
                 ChatListUser us = (ChatListUser) mMessageListAdapter.getItem(position);
                 intent.putExtra("user_id", us.getId());
                 intent.putExtra("matchId", us.getMatchId());
@@ -56,7 +52,7 @@ public class MatchList extends AppCompatActivity {
                 intent.putExtra("surname", us.getUsername());
                 intent.putExtra("queue", us.getQueue());
                 intent.putExtra("intersectionPolyline", us.getIntersectionPolyline());
-                MatchList.this.startActivity(intent);
+                MatchListActivity.this.startActivity(intent);
             }
 
         });

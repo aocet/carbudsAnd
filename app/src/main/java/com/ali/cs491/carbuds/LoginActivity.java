@@ -307,7 +307,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             } else {
                 try {
                     token = jsonObj.getString("token");
-                    int user_id = jsonObj.getInt("user_id");
+                    user_id = jsonObj.getInt("user_id");
                     writeShared(token, user_id);
                 } catch (JSONException e) {
                     e.printStackTrace();

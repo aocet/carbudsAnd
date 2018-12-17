@@ -66,8 +66,8 @@
                 android:value="com.ali.cs491.carbuds.MainActivity" />
         </activity>
         <activity android:name=".DatePickerActivity" />
-        <activity android:name=".MatchList" />
-        <activity android:name=".Chat"
+        <activity android:name=".MatchListActivity" />
+        <activity android:name=".ChatActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
