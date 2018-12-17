@@ -1,6 +1,8 @@
 package com.ali.cs491.carbuds;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,31 +14,31 @@ import org.json.JSONObject;
 
 public class TypeSelectionActivity extends AppCompatActivity {
     private Deneme task;
+    private String user_type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         task = new Deneme();
         task.execute((Void) null);
         setContentView(R.layout.activity_type_selection);
-        Button carOwnerButton = findViewById(R.id.carOwnerButton);
-        Button hitchhikerButton = findViewById(R.id.hitchhikerButton);
+        Button setTripButton = findViewById(R.id.setTripButton);
         Button settingsButton = findViewById(R.id.settingsButton);
         Button matchButton = findViewById(R.id.matchButton);
         Button initDriverButton = findViewById(R.id.init_driver);
         Button initHitchButton = findViewById(R.id.init_hitch);
-        carOwnerButton.setOnClickListener(new View.OnClickListener() {
+        readShared();
+        setTripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RouteManager.setUserType(RouteManager.DRIVER);
-                Intent intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
-                startActivity(intent);
-            }
-        });
-        hitchhikerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RouteManager.setUserType(RouteManager.HITCHHIKER);
-                Intent intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
+                Intent intent;
+                if(user_type.equals("driver")){
+                    RouteManager.setUserType(RouteManager.DRIVER);
+                    intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
+                }
+                else {
+                    RouteManager.setUserType(RouteManager.HITCHHIKER);
+                    intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
+                }
                 startActivity(intent);
             }
         });
@@ -74,6 +76,11 @@ public class TypeSelectionActivity extends AppCompatActivity {
 
 
     }
+    public void readShared(){
+        SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
+        user_type = sharedPref.getString("type", "");
+    }
+
     private void getCandidate(String str, String id){
         JSONObject jsonObj = new JSONObject();
         Connection connection = new Connection();
