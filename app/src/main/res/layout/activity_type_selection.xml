@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TypeSelectionActivity">
+
+    <Button
+        android:id="@+id/carOwnerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Car Owner"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="148dp" />
+
+    <Button
+        android:id="@+id/hitchhikerButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="69dp"
+        android:text="Hitchhiker"
+        app:layout_constraintTop_toBottomOf="@+id/carOwnerButton"
+        tools:layout_editor_absoluteX="148dp" />
+
+    <Button
+        android:id="@+id/settingsButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:text="Settings"
+        app:layout_constraintTop_toBottomOf="@+id/hitchhikerButton"
+        tools:layout_editor_absoluteX="161dp" />
+
+    <Button
+        android:id="@+id/matchButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="Matches"
+        app:layout_constraintTop_toBottomOf="@+id/settingsButton"
+        tools:layout_editor_absoluteX="162dp" />
+</android.support.constraint.ConstraintLayout>
