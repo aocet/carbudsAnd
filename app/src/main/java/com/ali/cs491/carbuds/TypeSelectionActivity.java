@@ -22,6 +22,8 @@ public class TypeSelectionActivity extends AppCompatActivity {
         Button hitchhikerButton = findViewById(R.id.hitchhikerButton);
         Button settingsButton = findViewById(R.id.settingsButton);
         Button matchButton = findViewById(R.id.matchButton);
+        Button initDriverButton = findViewById(R.id.init_driver);
+        Button initHitchButton = findViewById(R.id.init_hitch);
         carOwnerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -50,6 +52,22 @@ public class TypeSelectionActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(TypeSelectionActivity.this, MatchList.class);
+                startActivity(intent);
+            }
+        });
+        initDriverButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(TypeSelectionActivity.this, InitialDriverProfileActivity.class);
+                startActivity(intent);
+            }
+        });
+        initHitchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(TypeSelectionActivity.this, InitialHitchhikerProfileActivity.class);
                 startActivity(intent);
             }
         });
