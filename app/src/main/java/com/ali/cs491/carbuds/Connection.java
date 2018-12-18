@@ -44,8 +44,9 @@ public class Connection {
         HttpURLConnection urlConnection = null;
         OutputStream out = null;
         try {
-            //URL url = new URL("http://35.205.45.78/" + type);
-            URL url = new URL("http://10.0.2.2:5000/"+ type);
+            // TODO: PUSHLARKEN LOCAL IP ILE PUSHLAMAYIN LUTFEN
+            URL url = new URL("http://35.205.45.78/" + type);
+            //URL url = new URL("http://10.0.2.2:5000/"+ type);
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("POST");
             urlConnection.setRequestProperty("Content-Type","application/json");
