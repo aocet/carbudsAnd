@@ -69,7 +69,7 @@ public class TypeSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                Intent intent = new Intent(TypeSelectionActivity.this, InitialHitchhikerProfileActivity.class);
+                Intent intent = new Intent(TypeSelectionActivity.this, Main2Activity.class);
                 startActivity(intent);
             }
         });

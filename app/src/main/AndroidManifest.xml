@@ -58,7 +58,7 @@
             android:label="@string/title_activity_selection" />
         <activity
             android:name=".MatchmakingActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
@@ -72,11 +72,16 @@
         <activity
             android:name=".ChatActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".InfoMatchActivity"></activity>
+        <activity android:name=".InfoMatchActivity" />
         <activity android:name=".InitialHitchhikerProfileActivity" />
         <activity android:name=".InitialDriverProfileActivity" />
         <activity android:name=".RoleSelectionActivity" />
-        <activity android:name=".DriverProfilePageActivity"></activity>
+        <activity android:name=".DriverProfilePageActivity" />
+        <activity
+            android:name=".Main2Activity"
+            android:label="@string/title_activity_main2"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+
     </application>
 
 </manifest>
