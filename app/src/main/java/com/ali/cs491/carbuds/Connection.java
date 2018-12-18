@@ -47,6 +47,7 @@ public class Connection {
         OutputStream out = null;
         try {
             // TODO: PUSHLARKEN LOCAL IP ILE PUSHLAMAYIN LUTFEN
+            // TODO: TAMAM - Emre
             URL url = new URL("http://35.205.45.78/" + type);
             //URL url = new URL("http://10.0.2.2:5000/"+ type);
             urlConnection = (HttpURLConnection) url.openConnection();
