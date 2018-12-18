@@ -35,6 +35,8 @@ public class Connection {
     public static final String GET_MATCHES = "get_matches";
     public static final String CHECK_DRIVER_PROFILE = "check_driver_profile";
     public static final String CHECK_HITCHHIKER_PROFILE = "check_hitchhiker_profile";
+    public static final String GET_DRIVER_PROFILE = "get_driver_profile";
+    public static final String GET_HITCHHIKER_PROFILE = "get_hitchhiker_profile";
 
     private String msg;
     public Connection(){
