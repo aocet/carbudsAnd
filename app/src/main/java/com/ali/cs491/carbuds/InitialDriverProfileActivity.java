@@ -260,7 +260,7 @@ public class InitialDriverProfileActivity extends AppCompatActivity {
             showProgress(false);
 
             if (success) {
-                writeShared("hitchhiker");
+                writeShared("driver");
                 Intent intent = new Intent(InitialDriverProfileActivity.this,TypeSelectionActivity.class);
                 startActivity(intent);
             }

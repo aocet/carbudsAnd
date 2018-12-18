@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -57,12 +58,14 @@ public class ProfileFragment extends Fragment {
 
     private View formView;
     private View progressView;
+    private View v;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
+
         return rootView;
     }
 
@@ -247,9 +250,7 @@ public class ProfileFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         Log.v(TAG, "Initializing sounds...");
 
-        View v = this.getView();
-
-        ImageButton play_button = (ImageButton) v.findViewById(R.id.edit_profile_button);
+        v = this.getView();
 
         passengerSeatView = v.findViewById(R.id.passenger_seat_view);
         genderPreferenceView = v.findViewById(R.id.gender_preference_view);
@@ -262,8 +263,6 @@ public class ProfileFragment extends Fragment {
 
         readShared();
         currentRoleView.setText(user_type);
-
-
 
         switch (user_type) {
             case "driver": {
@@ -283,7 +282,6 @@ public class ProfileFragment extends Fragment {
                 break;
             }
         }
-
         ImageButton editProfileButton = (ImageButton) v.findViewById(R.id.edit_profile_button);
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -306,6 +304,16 @@ public class ProfileFragment extends Fragment {
                         break;
                     }
                 }
+            }
+        });
+        Button roleSelectButton = (Button) v.findViewById(R.id.role_select_button);
+        roleSelectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
+                startActivity(intent);
+
             }
         });
 
