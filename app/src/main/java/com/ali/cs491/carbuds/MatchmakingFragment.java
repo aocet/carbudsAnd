@@ -1,37 +1,20 @@
 package com.ali.cs491.carbuds;
 
+import android.content.Context;
+import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-
-import com.yuyakaido.android.cardstackview.CardStackListener;
-import com.yuyakaido.android.cardstackview.Direction;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.ArrayList;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-
 import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.Toolbar;
-
-import android.view.Gravity;
-import android.view.MenuItem;
-
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
-
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
@@ -41,14 +24,60 @@ import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-public class MatchmakingActivity extends AppCompatActivity implements CardStackListener {
-    private static ImageView imageView;
-    private static ArrayList<Profile> profiles;
-    private static int profileIndex;
-    private SendRouteTask task;
+import static android.support.constraint.Constraints.TAG;
+
+
+public class MatchmakingFragment extends Fragment implements CardStackListener {
+    /**
+     * The fragment argument representing the section number for this
+     * fragment.
+     */
+    private static final String ARG_SECTION_NUMBER = "section_number";
+
+    public MatchmakingFragment() {
+    }
+
+    /**
+     * Returns a new instance of this fragment for the given section
+     * number.
+     */
+    public static MatchmakingFragment newInstance(int sectionNumber) {
+        MatchmakingFragment fragment = new MatchmakingFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private TextView passengerSeatView;
+    private TextView genderPreferenceView;
+    private TextView carModelView;
+    private TextView carBrandView;
+    private TextView licensePlateView;
+    private TextView musicPreferenceView;
+    private TextView userNameView;
+    private TextView currentRoleView;
+
+    private  int user_id;
+    public  String token;
+    private  String user_name;
+    private  String user_type;
+
+    private View formView;
+    private View progressView;
+
+    private ImageView imageView;
+    private ArrayList<Profile> profiles;
+    private  int profileIndex;
+    private MatchmakingActivity.SendRouteTask task;
     private DrawerLayout drawerLayout;
 
     private CardStackLayoutManager manager;
@@ -63,36 +92,27 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
         profiles.add(new Profile("Ali Osman", R.drawable.common_google_signin_btn_icon_light_normal_background));
         profileIndex =0;
     }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_matchmaking);
-  //      task = new SendRouteTask();
-    //    task.execute((Void) null);
-        getProfiles();
-
-        //setupNavigation();
-        setupCardStackView();
-        setupButton();
-
-        /*imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageResource(R.drawable.green);
-        Button no = findViewById(R.id.noButton);
-        no.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (profileIndex != profiles.size()-1) {
-                    profileIndex++;
-                } else {
-                    profileIndex = 0;
-                }
-                if (profiles.size()!=0 ) {
-                    imageView.setImageResource(profiles.get(profileIndex).getImageID());
-                }
-            }
-        });*/
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_matchmaking, container, false);
+        return rootView;
     }
 
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.v(TAG, "Initializing sounds...");
+
+        View v = this.getView();
+        getProfiles();
+
+        //setupNavigation(v);
+        initialize(v);
+        setupButton(v);
+    }
 
     private void sendRoute(){
         Trip trip = RouteManager.getTrip();
@@ -161,65 +181,63 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
     }
 
 
-/*
-    private void setupNavigation() {
-        // Toolbar
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        /*private void setupNavigation(View v) {
+            // Toolbar
+            Toolbar toolbar = v.findViewById(R.id.toolbar);
+            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-        // DrawerLayout
-        drawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-        actionBarDrawerToggle.syncState();
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+            // DrawerLayout
+            drawerLayout = v.findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
+            actionBarDrawerToggle.syncState();
+            drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-        // NavigationView
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        reload();
-                        break;
-                    case R.id.matches:
-                        addFirst(1);
-                        break;
-                    case R.id.find_buddy:
-                        addFirst(2);
-                        break;
-                    case R.id.set_trip_as_driver:
-                        addLast(1);
-                        break;
-                    case R.id.set_trip_as_hitchhiker:
-                        addLast(2);
-                        break;
-                    case R.id.update_driver_profile:
-                        removeFirst(1);
-                        break;
-                    case R.id.update_hitchhiker_profile:
-                        removeFirst(2);
-                        break;
-                    case R.id.settings:
-                        removeLast(1);
-                        break;
-                    case R.id.logout:
-                        removeLast(2);
-                        break;
+            // NavigationView
+            NavigationView navigationView = v.findViewById(R.id.navigation_view);
+            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                    switch (menuItem.getItemId()) {
+                        case R.id.home:
+                            reload();
+                            break;
+                        case R.id.matches:
+                            addFirst(1);
+                            break;
+                        case R.id.find_buddy:
+                            addFirst(2);
+                            break;
+                        case R.id.set_trip_as_driver:
+                            addLast(1);
+                            break;
+                        case R.id.set_trip_as_hitchhiker:
+                            addLast(2);
+                            break;
+                        case R.id.update_driver_profile:
+                            removeFirst(1);
+                            break;
+                        case R.id.update_hitchhiker_profile:
+                            removeFirst(2);
+                            break;
+                        case R.id.settings:
+                            removeLast(1);
+                            break;
+                        case R.id.logout:
+                            removeLast(2);
+                            break;
+                    }
+                    drawerLayout.closeDrawers();
+                    return true;
                 }
-                drawerLayout.closeDrawers();
-                return true;
-            }
-        });
-    }
-*/
+            });
+        }*/
 
-    private void setupCardStackView() {
-        initialize();
+    private void setupCardStackView(View v) {
+        initialize(v);
     }
 
-    private void setupButton() {
-        View skip = findViewById(R.id.skip_button);
+    private void setupButton(View v) {
+        View skip = v.findViewById(R.id.skip_button);
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -233,7 +251,7 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
             }
         });
 
-        View rewind = findViewById(R.id.rewind_button);
+        View rewind = v.findViewById(R.id.rewind_button);
         rewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -247,7 +265,7 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
             }
         });
 
-        View like = findViewById(R.id.like_button);
+        View like = v.findViewById(R.id.like_button);
         like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -262,8 +280,8 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
         });
     }
 
-    private void initialize() {
-        manager = new CardStackLayoutManager(this, this);
+    private void initialize(View v) {
+        manager = new CardStackLayoutManager(getActivity(), this);
         manager.setStackFrom(StackFrom.None);
         manager.setVisibleCount(3);
         manager.setTranslationInterval(8.0f);
@@ -273,8 +291,8 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
         manager.setDirections(Direction.HORIZONTAL);
         manager.setCanScrollHorizontal(true);
         manager.setCanScrollVertical(true);
-        adapter = new CardStackAdapter(this, createSpots());
-        cardStackView = (CardStackView)findViewById(R.id.card_stack_view);
+        adapter = new CardStackAdapter(getActivity(), createSpots());
+        cardStackView = (CardStackView)v.findViewById(R.id.card_stack_view);
         cardStackView.setLayoutManager(manager);
         cardStackView.setAdapter(adapter);
     }

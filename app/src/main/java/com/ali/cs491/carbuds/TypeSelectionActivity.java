@@ -74,14 +74,16 @@ public class TypeSelectionActivity extends AppCompatActivity {
         initDriverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TypeSelectionActivity.this, InitialDriverProfileActivity.class);
+
+                Intent intent = new Intent(TypeSelectionActivity.this, DriverProfilePageActivity.class);
                 startActivity(intent);
             }
         });
         initHitchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(TypeSelectionActivity.this, InitialHitchhikerProfileActivity.class);
+
+                Intent intent = new Intent(TypeSelectionActivity.this, Main2Activity.class);
                 startActivity(intent);
             }
         });
