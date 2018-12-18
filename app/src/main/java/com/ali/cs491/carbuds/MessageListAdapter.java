@@ -87,10 +87,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageText.setText(message.getMessage());
+            messageText.setText(mMessageList.get(this.getAdapterPosition()).getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText((message.getCreatedAt()));
+            timeText.setText(mMessageList.get(this.getAdapterPosition()).getCreatedAt());
         }
     }
 
@@ -108,12 +108,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
 
         void bind(Message message) {
-            messageText.setText(message.getMessage());
+            messageText.setText(mMessageList.get(this.getAdapterPosition()).getMessage());
 
             // Format the stored timestamp into a readable String using method.
-            timeText.setText((message.getCreatedAt()));
+            timeText.setText(mMessageList.get(this.getAdapterPosition()).getCreatedAt());
 
-            nameText.setText(message.getSender().getNickname());
+            nameText.setText(mMessageList.get(this.getAdapterPosition()).getSender().getNickname());
+            profileImage.setImageResource(R.drawable.green);
 
         }
     }

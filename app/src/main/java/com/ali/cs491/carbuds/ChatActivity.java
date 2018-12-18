@@ -57,6 +57,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
     private List<Message> messageList = new ArrayList<>();
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,8 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(this, messageList);
-        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mMessageRecycler.setLayoutManager(mLinearLayoutManager);
         mMessageRecycler.setAdapter(mMessageAdapter);
 
 
@@ -131,8 +133,10 @@ public class ChatActivity extends AppCompatActivity {
                     mMessageRecycler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mMessageRecycler.smoothScrollToPosition(
-                                    mMessageAdapter.getItemCount() - 1);
+                            if (messageList.size() > 0) {
+                                mMessageRecycler.smoothScrollToPosition(messageList.size()-1);
+                            }
+
                         }
                     }, 100);
                 }
@@ -196,7 +200,7 @@ public class ChatActivity extends AppCompatActivity {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("Name", "Emre");
+            obj.put("Name", name);
             obj.put("Id", USER_ID);
             obj.put("Body", messageField.getText().toString());
             obj.put("timestamp", Calendar.getInstance().getTime());
@@ -288,6 +292,7 @@ public class ChatActivity extends AppCompatActivity {
                                     public void run() {
                                         messageList.add(new Message(bodyOfMessage, new User(nameOfMessage, idOfMessage), recieveTimeOfMessage));
                                         mMessageAdapter.notifyDataSetChanged();
+                                        mMessageRecycler.smoothScrollToPosition(mMessageRecycler.getAdapter().getItemCount()-1);
                                     }
                                 });
                             } catch (JSONException e) {
