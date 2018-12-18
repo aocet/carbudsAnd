@@ -38,7 +38,7 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
     private FusedLocationProviderClient mFusedLocationClient;
     private boolean First = false;
     private Button searchButton;
-    private TextView searchBar;
+    private EditText searchBar;
     private double home_long,home_lat;
     private LatLng latLng;
     private String addressText,addMarker;

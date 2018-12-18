@@ -143,9 +143,9 @@ public class ChatActivity extends AppCompatActivity {
         messageField.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
-                    JSONObject obj = new JSONObject();
 
                     return sendMessage();
 
@@ -269,7 +269,7 @@ public class ChatActivity extends AppCompatActivity {
                                 nameOfMessage = json.getString("Name");
                                 timeOfMessage = json.getString("timestamp");
                                 idOfMessage = json.getInt("Id");
-                                String recieveTime = Helpers.timeFormatter(timeOfMessage);
+                                recieveTimeOfMessage = Helpers.timeFormatter(timeOfMessage);
 
                                 SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -308,44 +308,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
         new Thread(runnable).start();
-    }
-
-
-    private class recieve extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... Message) {
-            try {
-
-                IConnectToRabbitMQ rabbitmq = new IConnectToRabbitMQ("35.205.45.78",
-                        5672, "rabbitmq", "rabbitmq", EXCHANGE_NAME,
-                        "fanout", QUEUE_NAME);
-                rabbitmq.connectToRabbitMQ();
-                rabbitmq.getChannel().queueDeclare(rabbitmq.getQueue(), false, false,
-                        false, null);
-                DeliverCallback deliverCallback = new DeliverCallback() {
-                    @Override
-                    public void handle(String consumerTag, Delivery delivery) throws IOException {
-                        String message = new String(delivery.getBody(), "UTF-8");
-                        System.out.println(" [x] Received '" + message + "'");
-                        String text = "";
-                        mOutput.append("\n" + message);
-                    }
-                };
-                rabbitmq.getChannel().basicConsume(rabbitmq.getQueue(), true, deliverCallback, new CancelCallback() {
-                    @Override
-                    public void handle(String consumerTag) throws IOException {
-                    }
-                });
-
-
-            } catch (Exception e) {
-                // TODO: handle exception
-                e.printStackTrace();
-            }
-            return null;
-        }
-
     }
 
     @Override

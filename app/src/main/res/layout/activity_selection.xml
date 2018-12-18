@@ -16,14 +16,17 @@
         android:padding="10dp"
         android:layout_marginTop="20dp"
         android:paddingRight="10dp"/>
-    <TextView
+
+    <EditText
         android:id="@+id/searchBar"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="left|top"
-        android:text="SearchBar will be here"
-        android:padding="10dp"
         android:layout_marginTop="20dp"
-        android:paddingLeft="10dp"/>
+        android:hint="Search Place"
+        android:maxLines="1"
+        android:padding="10dp"
+        android:paddingLeft="10dp"
+        android:singleLine="true" />
 
 </fragment>
