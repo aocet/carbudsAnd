@@ -14,13 +14,11 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,15 +28,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.StringRequestListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedWriter;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +44,6 @@ import java.util.List;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    private UserLoginTask mAuthTask = null;
     public static String token;
     public static int user_id;
     // UI references.
@@ -103,10 +99,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void setupActionBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            // Show the Up button in the action bar.
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     /**
@@ -120,18 +113,63 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         editor.putString("token", token);
         editor.putInt("user_id", user_id);
         editor.putString("name", name);
-        editor.commit();
+        editor.apply();
     }
     public void readShared(){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
         user_id = sharedPref.getInt("user_id", -1);
         token = sharedPref.getString("token", "");
     }
-    private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
+    private void connection(String username, String mPassword){
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("username", username);
+            jsonObject.put("password", mPassword);
+        } catch(JSONException e){
+            e.printStackTrace();
         }
+        //TODO: replace ip
+        AndroidNetworking.post("http://10.0.2.2:5000/login")
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String str) {
+                        if(str.equals("false\n")){
+                            showProgress(false);
+                            mPasswordView.setError(getString(R.string.error_incorrect_password));
+                            mPasswordView.requestFocus();
+                            return;
+                        }
+                        try {
+                            JSONObject response = new JSONObject(str);
+                            token = response.getString("token");
+                            user_id = response.getInt("user_id");
+                            String user_name = response.getString("name");
+                            writeShared(token, user_id, user_name);
 
+                            showProgress(false);
+                            Intent intent = new Intent(LoginActivity.this,RoleSelectionActivity.class);
+                            startActivity(intent);
+                        } catch (JSONException e) {
+                            showProgress(false);
+                            mPasswordView.setError("Response error. please try again");
+                            mPasswordView.requestFocus();
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        showProgress(false);
+                        mPasswordView.setError("Connection can't be established, please try again");
+                        mPasswordView.requestFocus();
+                    }
+                });
+    }
+    private void attemptLogin() {
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -169,18 +207,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
+            connection(email,password);
         }
     }
 
     private boolean isEmailValid(String email) {
-        //TODO: Replace this with your own logic
         return true;
     }
 
     private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
         return password.length() > 4;
     }
 
@@ -246,14 +281,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        //addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-
+        // not implemented
     }
-
 
     private interface ProfileQuery {
         String[] PROJECTION = {
@@ -263,80 +296,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String username;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            username = email;
-            mPassword = password;
-        }
-        private String setupURLConnection(){
-            JSONObject jsonObject = new JSONObject();
-            try{
-                jsonObject.put("username", username);
-                jsonObject.put("password", mPassword);
-            } catch(JSONException e){
-                e.printStackTrace();
-            }
-            Connection connection= new Connection();
-            connection.setConnection(Connection.LOGIN, jsonObject);
-            return connection.getResponseMessage();
-        }
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            String msg = setupURLConnection();
-            JSONObject jsonObj = null;
-            Log.i("Carbuds",msg);
-            try {
-                 jsonObj = new JSONObject(msg);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            if(msg.equals("false\n")){
-                return false;
-            } else {
-                try {
-                    token = jsonObj.getString("token");
-                    user_id = jsonObj.getInt("user_id");
-                    String user_name = jsonObj.getString("name");
-                    writeShared(token, user_id, user_name);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                Intent intent = new Intent(LoginActivity.this,RoleSelectionActivity.class);
-                startActivity(intent);
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
     }
 }
 
