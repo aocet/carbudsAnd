@@ -48,6 +48,7 @@ public class ChatActivity extends AppCompatActivity {
     String recieveTimeOfMessage = "";
     int idOfMessage = -1;
 
+    EditText messageField;
 
     /**
      * Called when the activity is first created.
@@ -95,7 +96,7 @@ public class ChatActivity extends AppCompatActivity {
         };
 
         String selection = DbContract.FeedEntry.COLUMN_EXCHANGE_NAME + " = ?";
-        String[] selectionArgs = { EXCHANGE_NAME };
+        String[] selectionArgs = {EXCHANGE_NAME};
 
         Cursor cursor = db.query(
                 DbContract.FeedEntry.TABLE_NAME,   // The table to query
@@ -108,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
         );
 
         List itemIds = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        while (cursor.moveToNext()) {
             long itemId = cursor.getLong(
                     cursor.getColumnIndexOrThrow(DbContract.FeedEntry._ID));
             String message = cursor.getString(cursor.getColumnIndex(DbContract.FeedEntry.COLUMN_MESSAGE));
@@ -138,31 +139,26 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
-        final EditText etv1 = (EditText) findViewById(R.id.edittext_chatbox);
-        etv1.setOnKeyListener(new View.OnKeyListener() {
+        messageField = (EditText) findViewById(R.id.edittext_chatbox);
+        messageField.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN)
-                        && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
                     // Perform action on key press
                     JSONObject obj = new JSONObject();
 
-                    try {
-                        obj.put("Name", "Emre");
-                        obj.put("Id", USER_ID);
-                        obj.put("Body", etv1.getText().toString());
-                        obj.put("timestamp", Calendar.getInstance().getTime());
-
-                        new send().execute(obj.toString());
-                        etv1.setText("");
-                        etv1.setHint("Enter message");
-                        return true;
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    return sendMessage();
 
                 }
                 return false;
+            }
+        });
+
+        Button sendButton = (Button) findViewById(R.id.button_chatbox_send);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendMessage();
             }
         });
 
@@ -170,7 +166,8 @@ public class ChatActivity extends AppCompatActivity {
 
         Toolbar topToolBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(topToolBar);
-        ActionBar actionBar = getSupportActionBar();;
+        ActionBar actionBar = getSupportActionBar();
+        ;
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         Button b = (Button) findViewById(R.id.info_button);
@@ -188,10 +185,30 @@ public class ChatActivity extends AppCompatActivity {
                 intent.putExtra("tripStartTime", tripStartTime);
                 intent.putExtra("startPoint", startPoint);
                 intent.putExtra("endPoint", endPoint);
-                startActivity(intent);}
+                startActivity(intent);
+            }
         });
 
 
+    }
+
+    public boolean sendMessage() {
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("Name", "Emre");
+            obj.put("Id", USER_ID);
+            obj.put("Body", messageField.getText().toString());
+            obj.put("timestamp", Calendar.getInstance().getTime());
+
+            new send().execute(obj.toString());
+            messageField.setText("");
+            messageField.setHint("Enter message");
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
