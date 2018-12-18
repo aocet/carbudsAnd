@@ -57,6 +57,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView mMessageRecycler;
     private MessageListAdapter mMessageAdapter;
     private List<Message> messageList = new ArrayList<>();
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +82,8 @@ public class ChatActivity extends AppCompatActivity {
 
         mMessageRecycler = (RecyclerView) findViewById(R.id.reyclerview_message_list);
         mMessageAdapter = new MessageListAdapter(this, messageList);
-        mMessageRecycler.setLayoutManager(new LinearLayoutManager(this));
+        mLinearLayoutManager = new LinearLayoutManager(this);
+        mMessageRecycler.setLayoutManager(mLinearLayoutManager);
         mMessageRecycler.setAdapter(mMessageAdapter);
 
 
@@ -131,8 +133,10 @@ public class ChatActivity extends AppCompatActivity {
                     mMessageRecycler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            mMessageRecycler.smoothScrollToPosition(
-                                    mMessageAdapter.getItemCount() - 1);
+                            if (messageList.size() > 0) {
+                                mMessageRecycler.smoothScrollToPosition(messageList.size()-1);
+                            }
+
                         }
                     }, 100);
                 }
@@ -143,9 +147,9 @@ public class ChatActivity extends AppCompatActivity {
         messageField.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_ENTER) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
-                    JSONObject obj = new JSONObject();
 
                     return sendMessage();
 
@@ -196,7 +200,7 @@ public class ChatActivity extends AppCompatActivity {
         JSONObject obj = new JSONObject();
 
         try {
-            obj.put("Name", "Emre");
+            obj.put("Name", name);
             obj.put("Id", USER_ID);
             obj.put("Body", messageField.getText().toString());
             obj.put("timestamp", Calendar.getInstance().getTime());
@@ -269,7 +273,7 @@ public class ChatActivity extends AppCompatActivity {
                                 nameOfMessage = json.getString("Name");
                                 timeOfMessage = json.getString("timestamp");
                                 idOfMessage = json.getInt("Id");
-                                String recieveTime = Helpers.timeFormatter(timeOfMessage);
+                                recieveTimeOfMessage = Helpers.timeFormatter(timeOfMessage);
 
                                 SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -288,6 +292,7 @@ public class ChatActivity extends AppCompatActivity {
                                     public void run() {
                                         messageList.add(new Message(bodyOfMessage, new User(nameOfMessage, idOfMessage), recieveTimeOfMessage));
                                         mMessageAdapter.notifyDataSetChanged();
+                                        mMessageRecycler.smoothScrollToPosition(mMessageRecycler.getAdapter().getItemCount()-1);
                                     }
                                 });
                             } catch (JSONException e) {
@@ -308,44 +313,6 @@ public class ChatActivity extends AppCompatActivity {
             }
         };
         new Thread(runnable).start();
-    }
-
-
-    private class recieve extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... Message) {
-            try {
-
-                IConnectToRabbitMQ rabbitmq = new IConnectToRabbitMQ("35.205.45.78",
-                        5672, "rabbitmq", "rabbitmq", EXCHANGE_NAME,
-                        "fanout", QUEUE_NAME);
-                rabbitmq.connectToRabbitMQ();
-                rabbitmq.getChannel().queueDeclare(rabbitmq.getQueue(), false, false,
-                        false, null);
-                DeliverCallback deliverCallback = new DeliverCallback() {
-                    @Override
-                    public void handle(String consumerTag, Delivery delivery) throws IOException {
-                        String message = new String(delivery.getBody(), "UTF-8");
-                        System.out.println(" [x] Received '" + message + "'");
-                        String text = "";
-                        mOutput.append("\n" + message);
-                    }
-                };
-                rabbitmq.getChannel().basicConsume(rabbitmq.getQueue(), true, deliverCallback, new CancelCallback() {
-                    @Override
-                    public void handle(String consumerTag) throws IOException {
-                    }
-                });
-
-
-            } catch (Exception e) {
-                // TODO: handle exception
-                e.printStackTrace();
-            }
-            return null;
-        }
-
     }
 
     @Override
