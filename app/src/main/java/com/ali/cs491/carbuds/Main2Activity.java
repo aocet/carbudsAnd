@@ -1,59 +1,15 @@
 package com.ali.cs491.carbuds;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.util.DiffUtil;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
-import com.yuyakaido.android.cardstackview.CardStackListener;
-import com.yuyakaido.android.cardstackview.CardStackView;
-import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
-import com.yuyakaido.android.cardstackview.StackFrom;
-import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.ali.cs491.carbuds.MatchmakingFragment;
-import com.ali.cs491.carbuds.ProfileFragment;
-
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import static android.support.constraint.Constraints.TAG;
 
 public class Main2Activity extends AppCompatActivity {
 
@@ -133,12 +89,12 @@ public class Main2Activity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
 
             switch (position){
-                case 0:
+                default:
                     return ProfileFragment.newInstance(0);
                 case 1:
                     return MatchmakingFragment.newInstance(1);
-                default:
-                    return ProfileFragment.newInstance(1);
+                case 2:
+                    return MatchListFragment.newInstance(2);
             }
 
         }

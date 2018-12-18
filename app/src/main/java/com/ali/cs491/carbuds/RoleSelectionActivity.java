@@ -35,10 +35,10 @@ public class RoleSelectionActivity extends AppCompatActivity {
         driver_button = findViewById(R.id.driver_button);
         readShared();
 
-        if(!user_type.isEmpty()){
+/*        if(!user_type.isEmpty()){
             Intent intent = new Intent(RoleSelectionActivity.this,TypeSelectionActivity.class);
             startActivity(intent);
-        }
+        }*/
 
         hitchhiker_button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,7 +107,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
                 intent = new Intent(RoleSelectionActivity.this, InitialHitchhikerProfileActivity.class);
             }
             else {
-                writeShared("driver");
+                writeShared("hitchhiker");
                 RouteManager.setUserType(RouteManager.HITCHHIKER);
                 intent = new Intent(RoleSelectionActivity.this, TypeSelectionActivity.class);
             }
