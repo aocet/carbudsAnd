@@ -3,18 +3,32 @@ package com.ali.cs491.carbuds;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import com.esafirm.imagepicker.features.ReturnMode;
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.model.Image;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
+import java.util.ArrayList;
+
 public class TypeSelectionActivity extends AppCompatActivity {
+    private static final int RC_CAMERA = 3000;
     private Deneme task;
     private String user_type;
+    private ArrayList<Image> images = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,8 +87,46 @@ public class TypeSelectionActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-
+    }
+    // image picker method
+    private void captureImage() {
+        ImagePicker.cameraOnly().start(this);
+    }
+    private void selectImage(){
+        ImagePicker imagePicker= ImagePicker.create(TypeSelectionActivity.this).language("in") // Set image picker language
+                .returnMode(ReturnMode.ALL) // set whether pick action or camera action should return immediate result or not. Only works in single mode for image picker
+                .folderMode(true) // set folder mode (false by default)
+                .includeVideo(false) // include video (false by default)
+                .toolbarArrowColor(Color.RED) // set toolbar arrow up color
+                .toolbarFolderTitle("Folder") // folder selection title
+                .toolbarImageTitle("Tap to select") // image selection title
+                .toolbarDoneButtonText("DONE"); // done button text
+        imagePicker.single();
+        imagePicker.limit(1) // max images can be selected (99 by default)
+                .showCamera(true) // show camera or not (true by default)
+                .imageDirectory("Camera")   // captured image directory name ("Camera" folder by default)
+                .imageFullDirectory(Environment.getExternalStorageDirectory().getPath()).start(); // can be full path
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == RC_CAMERA) {
+            if (grantResults.length != 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                captureImage();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, final int resultCode, Intent data) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            images = (ArrayList<Image>) ImagePicker.getImages(data);
+            File imgFile = new File(images.get(0).getPath());
+            if(imgFile.exists()){
+                Bitmap pp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
     public void readShared(){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
