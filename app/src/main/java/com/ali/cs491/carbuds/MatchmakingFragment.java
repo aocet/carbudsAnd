@@ -1,13 +1,10 @@
 package com.ali.cs491.carbuds;
 
 import android.content.Context;
-import android.net.Uri;
-import android.os.AsyncTask;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.util.DiffUtil;
 import android.util.Log;
@@ -15,25 +12,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.SupportMapFragment;
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
 import com.yuyakaido.android.cardstackview.Direction;
-import com.yuyakaido.android.cardstackview.RewindAnimationSetting;
 import com.yuyakaido.android.cardstackview.StackFrom;
 import com.yuyakaido.android.cardstackview.SwipeAnimationSetting;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static android.support.constraint.Constraints.TAG;
@@ -45,7 +42,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
      * fragment.
      */
     private static final String ARG_SECTION_NUMBER = "section_number";
-
     public MatchmakingFragment() {
     }
 
@@ -55,6 +51,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
      */
     public static MatchmakingFragment newInstance(int sectionNumber) {
         MatchmakingFragment fragment = new MatchmakingFragment();
+        fragment.getUser_type();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
@@ -69,7 +66,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private TextView musicPreferenceView;
     private TextView userNameView;
     private TextView currentRoleView;
-
+    private JSONArray jsonArray;
     private  int user_id;
     public  String token;
     private  String user_name;
@@ -87,15 +84,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private CardStackLayoutManager manager;
     private CardStackAdapter adapter;
     private CardStackView cardStackView;
-    private void getProfiles(){
-        profiles = new ArrayList<Profile>();
-        //todo: delete this part after connecting server
-        Profile temp;
-        profiles.add(new Profile("Ali Osman", R.drawable.image_green));
-        profiles.add(new Profile("Ali Osman", R.drawable.common_google_signin_btn_icon_dark));
-        profiles.add(new Profile("Ali Osman", R.drawable.common_google_signin_btn_icon_light_normal_background));
-        profileIndex =0;
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,19 +91,60 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         View rootView = inflater.inflate(R.layout.activity_matchmaking, container, false);
         return rootView;
     }
+    private void getUser_type(){
+        String token = LoginActivity.token;
+        String usertype = LoginActivity.userType;
+        String URL ;
+        if(usertype.equals("driver")) {
+            URL = Connection.IP + Connection.GET_HITCHHIKER_CANDIDATE;
+        } else {
+            URL = Connection.IP + Connection.GET_DRIVER_CANDIDATE;
+        }
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("token", token);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(URL)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+                            //TODO:you dont have matchmaking now
+                        }
+                        try {
+                            jsonArray = new JSONArray(response);
+                            reload();
+                         //   matchmaking();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        String str = error.getErrorBody();
+                    }
+                });
+    }
+    private void getCandidates(){
 
-
+    }
+    public void matchmaking(){
+        View v = this.getView();
+        initialize(v);
+        setupButton(v);
+    }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.v(TAG, "Initializing sounds...");
+        matchmaking();
 
-        View v = this.getView();
-        getProfiles();
-
-        //setupNavigation(v);
-        initialize(v);
-        setupButton(v);
     }
 
     @Override
@@ -368,8 +397,23 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
 
     private List<Spot> createSpots() {
         List<Spot> spots = new ArrayList<>();
+        if(jsonArray!=null) {
+            for (int i = 0; i < jsonArray.length(); i++) {
+                try {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    System.out.print(jsonObject.toString());
+                    String URL = "http://35.205.45.78/get_user_image?user_image_id=" + jsonObject.getString("driver_id");
+                    String name = jsonObject.getString("name");
+                    String time = jsonObject.getString("trip_start_time");
+                    spots.add(new Spot(name, time, URL));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
         spots.add(new Spot("Yasaka Shrine", "Kyoto", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
-        spots.add(new Spot("Fushimi Inari Shrine", "Kyoto", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
+       /* spots.add(new Spot("Fushimi Inari Shrine", "Kyoto", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
         spots.add(new Spot("Bamboo Forest", "Kyoto", "https://source.unsplash.com/buF62ewDLcQ/600x800"));
         spots.add(new Spot("Brooklyn Bridge", "New York", "https://source.unsplash.com/THozNzxEP3g/600x800"));
         spots.add(new Spot("Empire State Building", "New York", "https://source.unsplash.com/USrZRcRS2Lw/600x800"));
@@ -378,6 +422,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         spots.add(new Spot("Eiffel Tower", "Paris", "https://source.unsplash.com/HN-5Z6AmxrM/600x800"));
         spots.add(new Spot("Big Ben", "London", "https://source.unsplash.com/CdVAUADdqEc/600x800"));
         spots.add(new Spot("Great Wall of China", "China", "https://source.unsplash.com/AWh9C-QjhE4/600x800"));
+        */
         return spots;
     }
 }

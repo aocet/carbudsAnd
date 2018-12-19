@@ -46,6 +46,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     public static String token;
     public static int user_id;
+    public static String userType;
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
