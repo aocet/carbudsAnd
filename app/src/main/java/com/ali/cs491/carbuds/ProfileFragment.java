@@ -30,6 +30,9 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
@@ -189,6 +192,8 @@ public class ProfileFragment extends Fragment {
         String loadUrl = "http://35.205.45.78/get_user_image?user_image_id=" + user_id;
         Glide.with(profilePic)
                 .load(loadUrl)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .apply(RequestOptions.skipMemoryCacheOf(true))
                 .into(profilePic);
 
         ImageButton settingsButton = v.findViewById(R.id.settings_button);
