@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
         LoginActivity.user_id = sharedPref.getInt("user_id", -1);
         LoginActivity.token = sharedPref.getString("token", "");
+        LoginActivity.userType =  sharedPref.getString("type", "");
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

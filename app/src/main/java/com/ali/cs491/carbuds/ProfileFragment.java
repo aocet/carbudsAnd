@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -153,6 +154,51 @@ public class ProfileFragment extends Fragment {
             }
         }
 
+        currentRoleView.setText(user_type);
+
+        switch (user_type) {
+            case "driver": {
+                ProfileFragment.GetDriverProfileTask task = new ProfileFragment.GetDriverProfileTask();
+                task.execute((Void) null);
+
+                break;
+            }
+            case "hitchhiker": {
+                ProfileFragment.GetHitchhikerProfileTask task = new ProfileFragment.GetHitchhikerProfileTask();
+                task.execute((Void) null);
+                break;
+            }
+            default: {
+                Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        ImageButton editProfileButton = v.findViewById(R.id.edit_profile_button);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (user_type) {
+                    case "driver": {
+                        Intent intent = new Intent(getActivity(), InitialDriverProfileActivity.class);
+                        startActivity(intent);
+
+                        break;
+                    }
+                    case "hitchhiker": {
+                        Intent intent = new Intent(getActivity(), InitialHitchhikerProfileActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    default: {
+                        Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
+            }
+        });
+
         mDrawerLayout = v.findViewById(R.id.profile_drawer);
 
         NavigationView navigationView = v.findViewById(R.id.nav_view);
@@ -215,9 +261,6 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-
-
-
         return v;
     }
 
@@ -274,6 +317,8 @@ public class ProfileFragment extends Fragment {
             if(imgFile.exists()){
                 //Bitmap pp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 uploadImage(imgFile);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(this).attach(this).commit();
             }
             return;
         }
@@ -490,50 +535,6 @@ public class ProfileFragment extends Fragment {
         v = this.getView();
 
         readShared();
-        currentRoleView.setText(user_type);
-
-        switch (user_type) {
-            case "driver": {
-                ProfileFragment.GetDriverProfileTask task = new ProfileFragment.GetDriverProfileTask();
-                task.execute((Void) null);
-
-                break;
-            }
-            case "hitchhiker": {
-                ProfileFragment.GetHitchhikerProfileTask task = new ProfileFragment.GetHitchhikerProfileTask();
-                task.execute((Void) null);
-                break;
-            }
-            default: {
-                Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
-                startActivity(intent);
-                break;
-            }
-        }
-        ImageButton editProfileButton = v.findViewById(R.id.edit_profile_button);
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (user_type) {
-                    case "driver": {
-                        Intent intent = new Intent(getActivity(), InitialDriverProfileActivity.class);
-                        startActivity(intent);
-
-                        break;
-                    }
-                    case "hitchhiker": {
-                        Intent intent = new Intent(getActivity(), InitialHitchhikerProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    default: {
-                        Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
-            }
-        });
 
     }
 }

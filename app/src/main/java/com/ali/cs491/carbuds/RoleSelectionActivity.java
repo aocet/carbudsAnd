@@ -43,6 +43,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
         hitchhiker_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LoginActivity.userType = "hitchhiker";
                 mHitchhikerTask = new FetchHitchhikerProfileTask();
                 mHitchhikerTask.execute((Void) null);
             }
@@ -50,6 +51,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
         driver_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                LoginActivity.userType = "driver";
                 mDriverTask = new FetchDriverProfileTask();
                 mDriverTask.execute((Void) null);
             }
