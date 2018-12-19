@@ -17,12 +17,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONObject;
+
 
 public class MapDialogFragment extends DialogFragment
         implements OnMapReadyCallback{
 
     GoogleMap mMap;
     public static String TAG;
+    private JSONObject jsonObject;
     public MapDialogFragment() {
         // Required empty public constructor
     }
@@ -72,5 +75,8 @@ public class MapDialogFragment extends DialogFragment
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
         dialog.cancel();
+    }
+    public void setCandidateInfo(JSONObject jsonObject){
+        this.jsonObject = jsonObject;
     }
 }

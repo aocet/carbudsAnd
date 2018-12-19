@@ -267,9 +267,17 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
             @Override
             public void onClick(View v) {
                 //TODO:: 2. tiklamada patliyor yapilacak.
-               mapDialogFragment= new MapDialogFragment();
-               mapDialogFragment.setCancelable(true);
-               mapDialogFragment.show(getFragmentManager(), "mapsfragment");
+               int index = manager.getTopPosition();
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = jsonArray.getJSONObject(index);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mapDialogFragment= new MapDialogFragment();
+                mapDialogFragment.setCandidateInfo(jsonObject);
+                mapDialogFragment.setCancelable(true);
+                mapDialogFragment.show(getFragmentManager(), "mapsfragment");
                 /*RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
                         .setDirection(Direction.Bottom)
                         .setDuration(200)
