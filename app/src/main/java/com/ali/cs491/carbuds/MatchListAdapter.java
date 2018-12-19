@@ -9,6 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 public class MatchListAdapter extends BaseAdapter {
@@ -51,7 +55,11 @@ public class MatchListAdapter extends BaseAdapter {
 
         textView.setText(user.getName());
 
-        imageView.setImageResource(R.drawable.green);
+        Glide.with(imageView)
+                .load("http://35.205.45.78/get_user_image?user_image_id="+user.getId())
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .apply(RequestOptions.skipMemoryCacheOf(true))
+                .into(imageView);
 
         return rowView;
     }
