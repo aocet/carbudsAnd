@@ -92,8 +92,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_matchmaking, container, false);
 
-        getProfiles();
-
         //setupNavigation(v);
         initialize(v);
         setupButton(v);
