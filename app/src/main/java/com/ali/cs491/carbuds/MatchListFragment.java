@@ -136,6 +136,7 @@ public class MatchListFragment extends Fragment {
             JSONArray jsonarray = null;
             Log.i("Carbuds",msg);
             try {
+                //users = new ArrayList<ChatListUser>();
                 jsonarray = new JSONArray(msg);
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
@@ -178,6 +179,7 @@ public class MatchListFragment extends Fragment {
             mMatchTask = null;
 
             if (success) {
+
                 mMessageListAdapter.notifyDataSetInvalidated();
             } else {
             }
@@ -185,7 +187,8 @@ public class MatchListFragment extends Fragment {
 
         @Override
         protected void onCancelled() {
-            mMatchTask = null;
+
+            mMatchTask.cancel(true);
         }
     }
 }
