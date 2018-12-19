@@ -4,7 +4,10 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
+
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.util.DiffUtil;
 import android.util.Log;
@@ -16,6 +19,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.SupportMapFragment;
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager;
 import com.yuyakaido.android.cardstackview.CardStackListener;
 import com.yuyakaido.android.cardstackview.CardStackView;
@@ -56,7 +60,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         fragment.setArguments(args);
         return fragment;
     }
-
+    private static MapDialogFragment mapDialogFragment;
     private TextView passengerSeatView;
     private TextView genderPreferenceView;
     private TextView carModelView;
@@ -208,7 +212,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private void setupCardStackView(View v) {
         initialize(v);
     }
-
     private void setupButton(View v) {
         View skip = v.findViewById(R.id.skip_button);
         skip.setOnClickListener(new View.OnClickListener() {
@@ -228,13 +231,17 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         rewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
+                //TODO:: 2. tiklamada patliyor yapilacak.
+               mapDialogFragment= new MapDialogFragment();
+               mapDialogFragment.setCancelable(true);
+               mapDialogFragment.show(getFragmentManager(), "mapsfragment");
+                /*RewindAnimationSetting setting = new RewindAnimationSetting.Builder()
                         .setDirection(Direction.Bottom)
                         .setDuration(200)
                         .setInterpolator(new DecelerateInterpolator())
                         .build();
                 manager.setRewindAnimationSetting(setting);
-                cardStackView.rewind();
+                cardStackView.rewind();*/
             }
         });
 

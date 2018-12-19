@@ -70,7 +70,7 @@ public class DatePickerActivity extends AppCompatActivity {
                     .getAsString(new StringRequestListener() {
                         @Override
                         public void onResponse(String str) {
-                            Intent intent = new Intent(DatePickerActivity.this, Main2Activity.class);
+                            Intent intent = new Intent(DatePickerActivity.this, MatchmakingActivity.class);
                             startActivity(intent);
                         }
 

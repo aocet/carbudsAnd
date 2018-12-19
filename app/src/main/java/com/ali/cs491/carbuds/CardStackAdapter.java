@@ -38,7 +38,6 @@ public class CardStackAdapter extends RecyclerView.Adapter<CardStackAdapter.View
         Glide.with(holder.image)
                 .load(spot.url)
                 .into(holder.image);
-
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
