@@ -11,10 +11,11 @@ public class ChatListUser {
     private String tripStart;
     private String startPoint;
     private String endPoint;
+    private boolean isDriver;
 
     public ChatListUser(int id, int matchId, String name, String surname, String exchange,
                         String queue, String intersectionPolyline,
-                        String tripStart, String startPoint, String endPoint) {
+                        String tripStart, String startPoint, String endPoint, boolean isDriver) {
         this.id = id;
         this.matchId = matchId;
         this.name = name;
@@ -25,6 +26,7 @@ public class ChatListUser {
         this.tripStart = tripStart;
         this.startPoint = startPoint;
         this.endPoint = endPoint;
+        this.isDriver = isDriver;
     }
 
     public String getStartPoint() {
@@ -33,6 +35,14 @@ public class ChatListUser {
 
     public void setStartPoint(String startPoint) {
         this.startPoint = startPoint;
+    }
+
+    public boolean isDriver() {
+        return isDriver;
+    }
+
+    public void setDriver(boolean driver) {
+        isDriver = driver;
     }
 
     public String getEndPoint() {

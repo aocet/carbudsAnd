@@ -107,7 +107,7 @@ public class MatchListActivity extends AppCompatActivity {
                     String endPoint = jsonobject.getString("end_point");
                     users.add(new ChatListUser(USER_ID, matchId, name, lastName,
                             exchange, queue, intersectionPolyline, tripStartTime,
-                            startPoint, endPoint));
+                            startPoint, endPoint, USER_ID == driverId));
                 }
 
             } catch (JSONException e) {
