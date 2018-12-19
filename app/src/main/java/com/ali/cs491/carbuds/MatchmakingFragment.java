@@ -114,33 +114,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         setupButton(v);
     }
 
-    private void sendRoute(){
-        Trip trip = RouteManager.getTrip();
-        JSONObject jsonObj = new JSONObject();
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        Connection connection = new Connection();
-        System.out.println(formatter.format(date));
-        try {
-            jsonObj.put("token", LoginActivity.token );
-            jsonObj.put("user_id", "2"); // get id
-            jsonObj.put("trip_start_point", RouteManager.getPointString(trip.getStartPoint()));
-            jsonObj.put("trip_end_point", RouteManager.getPointString(trip.getEndPoint()));
-            jsonObj.put("trip_start_time", formatter.format(date));
-            if(trip.getUserType() == RouteManager.DRIVER) {
-                jsonObj.put("available_seat", "2");
-                connection.setConnection(Connection.SET_TRIP_DRIVER, jsonObj);
-                connection.getResponseMessage();
-            } else {
-                connection.setConnection(Connection.SET_TRIP_HITCHHIKER,jsonObj);
-                connection.getResponseMessage();
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onCardDragging(Direction direction, float ratio) {
         Log.d("CardStackView", "onCardDragging: d = " + direction.name() + ", r = " + ratio);
@@ -399,14 +372,5 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         spots.add(new Spot("Big Ben", "London", "https://source.unsplash.com/CdVAUADdqEc/600x800"));
         spots.add(new Spot("Great Wall of China", "China", "https://source.unsplash.com/AWh9C-QjhE4/600x800"));
         return spots;
-    }
-
-    public class SendRouteTask extends AsyncTask<Void, Void, Boolean> {
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            sendRoute();
-            return null;
-        }
     }
 }

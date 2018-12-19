@@ -7,6 +7,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.StringRequestListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -14,6 +22,7 @@ import java.util.Date;
 public class DatePickerActivity extends AppCompatActivity {
     private Button datePicker;
     private Button timePicker;
+    private Button setTrip;
     public static Date date;
     public static void setDate(){
         Date dt = new Date();
@@ -27,9 +36,54 @@ public class DatePickerActivity extends AppCompatActivity {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         datePicker = findViewById(R.id.datePickerButton);
         timePicker = findViewById(R.id.timePickerButton);
+        setTrip    = findViewById(R.id.pickFinishButton);
         datePicker.setText(dateFormat.format(date));
         timePicker.setText(timeFormat.format(date));
     }
+    private void sendRoute(){
+        Trip trip = RouteManager.getTrip();
+        JSONObject jsonObj = new JSONObject();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date = new Date();
+        System.out.println(formatter.format(date));
+        try {
+            jsonObj.put("token", LoginActivity.token );
+            jsonObj.put("user_id", LoginActivity.user_id); // get id
+            jsonObj.put("trip_start_point", RouteManager.getPointString(trip.getStartPoint()));
+            jsonObj.put("trip_end_point", RouteManager.getPointString(trip.getEndPoint()));
+            jsonObj.put("trip_start_time", formatter.format(date));
+
+            String URL;
+            if(trip.getUserType() == RouteManager.DRIVER) {
+                jsonObj.put("available_seat", "2");
+
+                URL = Connection.IP + Connection.SET_TRIP_DRIVER;
+            } else {
+                URL = Connection.IP + Connection.SET_TRIP_HITCHHIKER;
+            }
+            AndroidNetworking.post(URL)
+                    .addJSONObjectBody(jsonObj) // posting any type of file
+                    .setTag("test")
+                    .setPriority(Priority.MEDIUM)
+                    .build()
+                    .getAsString(new StringRequestListener() {
+                        @Override
+                        public void onResponse(String str) {
+                            Intent intent = new Intent(DatePickerActivity.this, Main2Activity.class);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onError(ANError anError) {
+
+                        }
+                    });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void showDatePicker(View v) {
         DialogFragment newFragment = new DatePickerFragment();
         ((DatePickerFragment) newFragment).setType(DatePickerFragment.DATE);
@@ -42,7 +96,6 @@ public class DatePickerActivity extends AppCompatActivity {
     }
     public void finish(View v){
         RouteManager.setDate(date);
-        Intent intent = new Intent(DatePickerActivity.this, MatchmakingActivity.class);
-        startActivity(intent);
+        sendRoute();
     }
 }
