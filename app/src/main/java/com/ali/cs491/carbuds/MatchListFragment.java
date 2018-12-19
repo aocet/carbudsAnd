@@ -175,7 +175,7 @@ public class MatchListFragment extends Fragment {
             mMatchTask = null;
 
             if (success) {
-                mMessageListAdapter.notifyDataSetChanged();
+                mMessageListAdapter.notifyDataSetInvalidated();
             } else {
             }
         }
