@@ -1,6 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ali.cs491.carbuds.ProfileFragment">
@@ -36,9 +38,9 @@
                 android:src="@drawable/nav_menu_header_bg"
                 app:srcCompat="@drawable/nav_menu_header_bg" />
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-
-                android:id="@+id/profile"
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_pic"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
 
@@ -49,9 +51,23 @@
                 android:elevation="5dp"
                 android:padding="20dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/green"
+                android:src="@drawable/anon_avatar"
                 app:civ_border_color="#FFFFFFFF"
                 app:civ_border_width="3dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/insert_image_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="161dp"
+                android:layout_marginEnd="120dp"
+                android:clickable="true"
+                android:src="@android:drawable/ic_menu_add"
+                app:layout_constraintBottom_toBottomOf="@+id/profile"
+                app:layout_constraintStart_toEndOf="@+id/profile"
+                app:layout_constraintTop_toTopOf="@+id/profile" />
 
             <RelativeLayout
                 android:id="@+id/profile_layout"
@@ -64,8 +80,8 @@
 
                 <ImageButton
                     android:id="@+id/edit_profile_button"
-                    android:layout_width="31dp"
-                    android:layout_height="37dp"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="16dp"
@@ -73,6 +89,18 @@
                     android:background="#ebca0707"
                     android:clickable="true"
                     android:src="@android:drawable/ic_menu_edit" />
+
+                <ImageButton
+                    android:id="@+id/settings_button"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="16dp"
+                    android:background="#ebca0707"
+                    android:clickable="true"
+                    android:src="@drawable/ic_settings_gear" />
 
 
                 <TextView
@@ -287,22 +315,19 @@
                     app:layout_constraintStart_toEndOf="@+id/current_role"
                     app:layout_constraintTop_toTopOf="@+id/current_role" />
 
-                <Button
-                    android:id="@+id/role_select_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="Change Role"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/current_role_view" />
-
 
             </android.support.constraint.ConstraintLayout>
         </RelativeLayout>
     </ScrollView>
-</FrameLayout>
+
+
+    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:fitsSystemWindows="true"
+        app:menu="@menu/navigation_matchmaking_activity"
+        />
+</android.support.v4.widget.DrawerLayout>

@@ -3,29 +3,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
-        android:title="Home"/>
+        android:id="@+id/cancel_trip"
+        android:title="Cancel Current Trip"/>
     <item
-        android:id="@+id/matches"
-        android:title="Matches"/>
-    <item
-        android:id="@+id/find_buddy"
-        android:title="Find buddy"/>
-    <item
-        android:id="@+id/set_trip_as_driver"
-        android:title="Set trip as Driver"/>
-    <item
-        android:id="@+id/set_trip_as_hitchhiker"
-        android:title="Set Trip as Hitchhiker"/>
-    <item
-        android:id="@+id/update_driver_profile"
-        android:title="Update Driver Profile"/>
-    <item
-        android:id="@+id/update_hitchhiker_profile"
-        android:title="Update Hitchhiker Profile"/>
-    <item
-        android:id="@+id/settings"
-        android:title="Settings"/>
+        android:id="@+id/change_role"
+        android:title="Change Role"/>
     <item
         android:id="@+id/logout"
         android:title="Logout"/>

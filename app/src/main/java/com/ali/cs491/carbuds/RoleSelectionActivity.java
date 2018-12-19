@@ -109,7 +109,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
             else {
                 writeShared("hitchhiker");
                 RouteManager.setUserType(RouteManager.HITCHHIKER);
-                intent = new Intent(RoleSelectionActivity.this, TypeSelectionActivity.class);
+                intent = new Intent(RoleSelectionActivity.this, Main2Activity.class);
             }
             startActivity(intent);
         }
@@ -161,7 +161,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
             else {
                 writeShared("driver");
                 RouteManager.setUserType(RouteManager.DRIVER);
-                intent = new Intent(RoleSelectionActivity.this, TypeSelectionActivity.class);
+                intent = new Intent(RoleSelectionActivity.this, Main2Activity.class);
             }
             startActivity(intent);
         }

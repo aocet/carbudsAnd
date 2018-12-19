@@ -158,56 +158,56 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     }
 
 
-        /*private void setupNavigation(View v) {
-            // Toolbar
-            Toolbar toolbar = v.findViewById(R.id.toolbar);
-            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+    /*private void setupNavigation(View v) {
+        // Toolbar
+        Toolbar toolbar = v.findViewById(R.id.toolbar);
+        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 
-            // DrawerLayout
-            drawerLayout = v.findViewById(R.id.drawer_layout);
-            ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-            actionBarDrawerToggle.syncState();
-            drawerLayout.addDrawerListener(actionBarDrawerToggle);
+        // DrawerLayout
+        drawerLayout = v.findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
+        actionBarDrawerToggle.syncState();
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
-            // NavigationView
-            NavigationView navigationView = v.findViewById(R.id.navigation_view);
-            navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                    switch (menuItem.getItemId()) {
-                        case R.id.home:
-                            reload();
-                            break;
-                        case R.id.matches:
-                            addFirst(1);
-                            break;
-                        case R.id.find_buddy:
-                            addFirst(2);
-                            break;
-                        case R.id.set_trip_as_driver:
-                            addLast(1);
-                            break;
-                        case R.id.set_trip_as_hitchhiker:
-                            addLast(2);
-                            break;
-                        case R.id.update_driver_profile:
-                            removeFirst(1);
-                            break;
-                        case R.id.update_hitchhiker_profile:
-                            removeFirst(2);
-                            break;
-                        case R.id.settings:
-                            removeLast(1);
-                            break;
-                        case R.id.logout:
-                            removeLast(2);
-                            break;
-                    }
-                    drawerLayout.closeDrawers();
-                    return true;
+        // NavigationView
+        NavigationView navigationView = v.findViewById(R.id.navigation_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.home:
+                        reload();
+                        break;
+                    case R.id.matches:
+                        addFirst(1);
+                        break;
+                    case R.id.find_buddy:
+                        addFirst(2);
+                        break;
+                    case R.id.set_trip_as_driver:
+                        addLast(1);
+                        break;
+                    case R.id.set_trip_as_hitchhiker:
+                        addLast(2);
+                        break;
+                    case R.id.update_driver_profile:
+                        removeFirst(1);
+                        break;
+                    case R.id.update_hitchhiker_profile:
+                        removeFirst(2);
+                        break;
+                    case R.id.settings:
+                        removeLast(1);
+                        break;
+                    case R.id.logout:
+                        removeLast(2);
+                        break;
                 }
-            });
-        }*/
+                drawerLayout.closeDrawers();
+                return true;
+            }
+        });
+    }*/
 
     private void setupCardStackView(View v) {
         initialize(v);

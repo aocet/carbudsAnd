@@ -19,12 +19,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hootsuite.nachos.NachoTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class InitialDriverProfileActivity extends AppCompatActivity {
 
@@ -89,6 +92,12 @@ public class InitialDriverProfileActivity extends AppCompatActivity {
         readShared();
         userNameView = findViewById(R.id.name);
         userNameView.setText(user_name);
+
+        CircleImageView profilePic = (CircleImageView)findViewById(R.id.profile);
+        Glide.with(profilePic)
+                .load("http://35.205.45.78/get_user_image?user_image_id=" + user_id)
+                .into(profilePic)
+                .waitForLayout();
 
     }
 
