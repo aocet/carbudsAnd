@@ -8,6 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+
 import java.util.List;
 
 
@@ -114,7 +118,11 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(mMessageList.get(this.getAdapterPosition()).getCreatedAt());
 
             nameText.setText(mMessageList.get(this.getAdapterPosition()).getSender().getNickname());
-            profileImage.setImageResource(R.drawable.green);
+            Glide.with(profileImage)
+                    .load("http://35.205.45.78/get_user_image?user_image_id="+mMessageList.get(this.getAdapterPosition()).getSender().getUserId())
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .apply(RequestOptions.skipMemoryCacheOf(true))
+                    .into(profileImage);
 
         }
     }

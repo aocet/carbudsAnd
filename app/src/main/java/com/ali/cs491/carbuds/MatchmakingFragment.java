@@ -81,6 +81,8 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private MatchmakingActivity.SendRouteTask task;
     private DrawerLayout drawerLayout;
 
+    private View v;
+
     private CardStackLayoutManager manager;
     private CardStackAdapter adapter;
     private CardStackView cardStackView;
@@ -88,8 +90,14 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.activity_matchmaking, container, false);
-        return rootView;
+        v = inflater.inflate(R.layout.activity_matchmaking, container, false);
+
+        getProfiles();
+
+        //setupNavigation(v);
+        initialize(v);
+        setupButton(v);
+        return v;
     }
     private void getUser_type(){
         String token = LoginActivity.token;

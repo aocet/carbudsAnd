@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
@@ -30,6 +31,9 @@ import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.signature.ObjectKey;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
@@ -150,6 +154,51 @@ public class ProfileFragment extends Fragment {
             }
         }
 
+        currentRoleView.setText(user_type);
+
+        switch (user_type) {
+            case "driver": {
+                ProfileFragment.GetDriverProfileTask task = new ProfileFragment.GetDriverProfileTask();
+                task.execute((Void) null);
+
+                break;
+            }
+            case "hitchhiker": {
+                ProfileFragment.GetHitchhikerProfileTask task = new ProfileFragment.GetHitchhikerProfileTask();
+                task.execute((Void) null);
+                break;
+            }
+            default: {
+                Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
+                startActivity(intent);
+                break;
+            }
+        }
+        ImageButton editProfileButton = v.findViewById(R.id.edit_profile_button);
+        editProfileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (user_type) {
+                    case "driver": {
+                        Intent intent = new Intent(getActivity(), InitialDriverProfileActivity.class);
+                        startActivity(intent);
+
+                        break;
+                    }
+                    case "hitchhiker": {
+                        Intent intent = new Intent(getActivity(), InitialHitchhikerProfileActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    default: {
+                        Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                }
+            }
+        });
+
         mDrawerLayout = v.findViewById(R.id.profile_drawer);
 
         NavigationView navigationView = v.findViewById(R.id.nav_view);
@@ -185,10 +234,12 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
-        CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_pic);
+        CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_fragment_pic);
         String loadUrl = "http://35.205.45.78/get_user_image?user_image_id=" + user_id;
         Glide.with(profilePic)
                 .load(loadUrl)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .apply(RequestOptions.skipMemoryCacheOf(true))
                 .into(profilePic);
 
         ImageButton settingsButton = v.findViewById(R.id.settings_button);
@@ -209,9 +260,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
-
-
 
         return v;
     }
@@ -269,6 +317,8 @@ public class ProfileFragment extends Fragment {
             if(imgFile.exists()){
                 //Bitmap pp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                 uploadImage(imgFile);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.detach(this).attach(this).commit();
             }
             return;
         }
@@ -485,50 +535,6 @@ public class ProfileFragment extends Fragment {
         v = this.getView();
 
         readShared();
-        currentRoleView.setText(user_type);
-
-        switch (user_type) {
-            case "driver": {
-                ProfileFragment.GetDriverProfileTask task = new ProfileFragment.GetDriverProfileTask();
-                task.execute((Void) null);
-
-                break;
-            }
-            case "hitchhiker": {
-                ProfileFragment.GetHitchhikerProfileTask task = new ProfileFragment.GetHitchhikerProfileTask();
-                task.execute((Void) null);
-                break;
-            }
-            default: {
-                Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
-                startActivity(intent);
-                break;
-            }
-        }
-        ImageButton editProfileButton = v.findViewById(R.id.edit_profile_button);
-        editProfileButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                switch (user_type) {
-                    case "driver": {
-                        Intent intent = new Intent(getActivity(), InitialDriverProfileActivity.class);
-                        startActivity(intent);
-
-                        break;
-                    }
-                    case "hitchhiker": {
-                        Intent intent = new Intent(getActivity(), InitialHitchhikerProfileActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                    default: {
-                        Intent intent = new Intent(getActivity(), RoleSelectionActivity.class);
-                        startActivity(intent);
-                        break;
-                    }
-                }
-            }
-        });
 
     }
 }
