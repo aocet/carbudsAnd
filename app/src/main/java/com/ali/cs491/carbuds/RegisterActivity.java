@@ -3,7 +3,9 @@ package com.ali.cs491.carbuds;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -27,6 +29,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 
+import com.androidnetworking.AndroidNetworking;
+import com.androidnetworking.common.Priority;
+import com.androidnetworking.error.ANError;
+import com.androidnetworking.interfaces.StringRequestListener;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +44,6 @@ public class RegisterActivity extends AppCompatActivity {
     /**
      * Id to identity READ_CONTACTS permission request.
      */
-    private RegisterActivity.RegisterTask mRegisterTask = null;
 
     // UI references.
     private EditText mEmailView;
@@ -66,10 +72,10 @@ public class RegisterActivity extends AppCompatActivity {
         mNameView = (EditText) findViewById(R.id.name);
         mSurnameView = (EditText) findViewById(R.id.surname);
         mUsernameView = (EditText) findViewById(R.id.username);
-        mGender = (Spinner)findViewById(R.id.gender);
+        mGender = (Spinner) findViewById(R.id.gender);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item,genders);
+                android.R.layout.simple_spinner_item, genders);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
@@ -106,6 +112,59 @@ public class RegisterActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
+    public void writeShared(String token, int user_id, String name){
+        SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString("token", token);
+        editor.putInt("user_id", user_id);
+        editor.putString("name", name);
+        editor.apply();
+    }
+    private void connection(String email, String password, String name, String surname,
+                            String username, String gender, String device) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("username", username);
+            jsonObject.put("password", password);
+            jsonObject.put("name", name);
+            jsonObject.put("surname", surname);
+            jsonObject.put("email", email);
+            jsonObject.put("gender", gender);
+            jsonObject.put("device_reg_id", device);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        //TODO: replace ip
+        AndroidNetworking.post("http://10.0.2.2:5000/signup")
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String str) {
+                        //TODO: daha farkli hata mesajlari gelecek
+                        if (str.equals("true\n")) {
+                            showProgress(false);
+                            writeShared("",-1,"");
+                            Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                            startActivity(intent);
+                            return;
+                        }
+                        showProgress(false);
+                        mPasswordView.setError("Register failed, try again");
+                        mPasswordView.requestFocus();
+                    }
+
+                    @Override
+                    public void onError(ANError anError) {
+                        showProgress(false);
+                        mPasswordView.setError("Connection can't be established, please try again");
+                        mPasswordView.requestFocus();
+                        Log.e("Carbuds", "Signup connection screw up");
+                    }
+                });
+    }
 
     /**
      * Attempts to sign in or register the account specified by the login form.
@@ -113,10 +172,6 @@ public class RegisterActivity extends AppCompatActivity {
      * errors are presented and no actual login attempt is made.
      */
     private void attemptRegister() {
-        if (mRegisterTask != null) {
-            return;
-        }
-
         // Reset errors.
         mEmailView.setError(null);
         mPasswordView.setError(null);
@@ -139,11 +194,11 @@ public class RegisterActivity extends AppCompatActivity {
         View focusView = null;
 
         // Check for a valid password, if the user entered one.
-        if (!TextUtils.isEmpty(password) &&!isPasswordValid(password, rePassword)) {
+        if (!TextUtils.isEmpty(password) && !isPasswordValid(password, rePassword)) {
             mPasswordView.setError(getString(R.string.error_invalid_password));
             focusView = mPasswordView;
             cancel = true;
-        } else if   (!TextUtils.isEmpty(rePassword) &&!isPasswordMatch(password, rePassword)) {
+        } else if (!TextUtils.isEmpty(rePassword) && !isPasswordMatch(password, rePassword)) {
             mRePasswordView.setError(getString(R.string.error_incorrect_password));
             focusView = mRePasswordView;
             cancel = true;
@@ -190,14 +245,12 @@ public class RegisterActivity extends AppCompatActivity {
             String deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(),
                     Settings.Secure.ANDROID_ID);
 
-            if(deviceId == null)
+            if (deviceId == null)
                 deviceId = "oddDevice";
-            Log.d("Custom" , deviceId);
-            String gender = (String)mGender.getSelectedItem();
+            Log.d("Custom", deviceId);
+            String gender = (String) mGender.getSelectedItem();
             String device = deviceId;
-            mRegisterTask = new RegisterTask(email, password, name, surname, username, gender, device );
-
-            mRegisterTask.execute((Void) null);
+            connection(email, password, name, surname, username, gender, device);
         }
     }
 
@@ -212,7 +265,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private boolean isPasswordMatch(String password, String confirmation) {
-        return password.equals( confirmation);
+        return password.equals(confirmation);
     }
 
     /**
@@ -248,102 +301,6 @@ public class RegisterActivity extends AppCompatActivity {
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
             mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
-        }
-    }
-
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class RegisterTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        private final String mUsername;
-        private final String mSurname;
-        private final String mName;
-
-        private final String mGender;
-        private final String mDevice;
-
-
-        RegisterTask(String email, String password, String name, String surname,
-                     String username, String gender, String device) {
-
-            mEmail = email;
-            mPassword = password;
-
-            mUsername = username;
-            mSurname = surname;
-            mName = name;
-
-            mGender = gender;
-            mDevice = device;
-
-        }
-
-        private String setupURLConnection(){
-            JSONObject jsonObject = new JSONObject();
-            try{
-                jsonObject.put("username", mUsername);
-                jsonObject.put("password", mPassword);
-                jsonObject.put("name", mName);
-                jsonObject.put("surname", mSurname);
-                jsonObject.put("email", mEmail);
-                jsonObject.put("gender", mGender);
-                jsonObject.put("device_reg_id", mDevice);
-
-            } catch(JSONException e){
-                e.printStackTrace();
-            }
-            Connection connection= new Connection();
-            connection.setConnection(Connection.SIGNUP, jsonObject);
-            return connection.getResponseMessage();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            try {
-
-                String msg = setupURLConnection();
-                if(msg!=null) {
-                    if (msg.equals("true\n")) {
-                        // Simulate network access
-                        return true;
-                    } else {
-                        // Simulate network access.
-                        Thread.sleep(2000);
-                        return false;
-                    }
-                } else {
-                    Log.w("Carbuds", "Null response at signup");
-                    return false;
-                }
-            } catch (InterruptedException e) {
-                Log.e("Carbuds", "Signup connection screw up");
-                return false;
-            }
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mRegisterTask = null;
-            showProgress(false);
-
-            if (success) {
-                Intent intent = new Intent(RegisterActivity.this,TypeSelectionActivity.class);
-                startActivity(intent);
-                return;
-
-            } else {
-                //TODO: POP A SIGN OR SOMETHING
-            }
-        }
-        @Override
-        protected void onCancelled() {
-            mRegisterTask = null;
-            showProgress(false);
         }
     }
 }

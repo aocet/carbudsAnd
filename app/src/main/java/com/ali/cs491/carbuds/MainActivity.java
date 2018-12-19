@@ -53,7 +53,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         readShared();
-        // Example of a call to a native method
+        if(LoginActivity.user_id != -1){
+            Intent intent = new Intent(MainActivity.this,RoleSelectionActivity.class);
+            startActivity(intent);
+        }
         Button loginButton = findViewById(R.id.loginButton);
         Button signUpButton = findViewById(R.id.signUpButton);
         //  to do add color for buttons and background

@@ -55,11 +55,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        readShared();
-        if(user_id != -1){
-            Intent intent = new Intent(LoginActivity.this,RoleSelectionActivity.class);
-            startActivity(intent);
-        }
         setContentView(R.layout.activity_login);
         setupActionBar();
         // Set up the login form.
