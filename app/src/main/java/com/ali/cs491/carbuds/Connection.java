@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Connection {
+    public static final String IP = "http://35.205.45.78/";
     public static final String SIGNUP="signup";
     public static final String LOGIN="login";
     public static final String SET_TRIP_DRIVER = "set_trip_driver";
@@ -37,7 +38,6 @@ public class Connection {
     public static final String CHECK_HITCHHIKER_PROFILE = "check_hitchhiker_profile";
     public static final String GET_DRIVER_PROFILE = "get_driver_profile";
     public static final String GET_HITCHHIKER_PROFILE = "get_hitchhiker_profile";
-
     private String msg;
     public Connection(){
         msg = "";

@@ -47,12 +47,11 @@ public class TypeSelectionActivity extends AppCompatActivity {
                 Intent intent;
                 if(user_type.equals("driver")){
                     RouteManager.setUserType(RouteManager.DRIVER);
-                    intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
                 }
                 else {
                     RouteManager.setUserType(RouteManager.HITCHHIKER);
-                    intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
                 }
+                intent = new Intent(TypeSelectionActivity.this, StartSelectionActivity.class);
                 startActivity(intent);
             }
         });
