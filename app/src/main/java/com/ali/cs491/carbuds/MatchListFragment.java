@@ -143,6 +143,7 @@ public class MatchListFragment extends Fragment {
                     int hitchhikerId = jsonobject.getInt("hitchhiker_id");
                     int driverId = jsonobject.getInt("driver_id");
                     int matchId = jsonobject.getInt("match_id");
+                    int id = USER_ID == driverId ? hitchhikerId : driverId;
                     String queue = (USER_ID == hitchhikerId ?
                             jsonobject.getString("hitchhiker_queue") :
                             jsonobject.getString("driver_queue"));
@@ -157,7 +158,7 @@ public class MatchListFragment extends Fragment {
                     String startPoint = jsonobject.getString("start_point");
                     String endPoint = jsonobject.getString("end_point");
                     boolean isDriver = (USER_ID == driverId);
-                    users.add(new ChatListUser(USER_ID, matchId, name, lastName,
+                    users.add(new ChatListUser(id, matchId, name, lastName,
                             exchange, queue, intersectionPolyline, tripStartTime,
                             startPoint, endPoint, isDriver));
                 }

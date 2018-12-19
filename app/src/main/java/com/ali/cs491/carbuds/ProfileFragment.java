@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment {
                     }
                 });
 
-        CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_pic);
+        CircleImageView profilePic = (CircleImageView) v.findViewById(R.id.profile_pic);
         String loadUrl = "http://35.205.45.78/get_user_image?user_image_id=" + user_id;
         Glide.with(profilePic)
                 .load(loadUrl)

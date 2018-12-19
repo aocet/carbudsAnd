@@ -17,6 +17,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -107,7 +108,7 @@ public class InfoMatchActivity extends FragmentActivity {
 
         CircleImageView profilePic = (CircleImageView)findViewById(R.id.profilePicture);
         Glide.with(profilePic)
-                .load("http://10.0.2.2:5000/get_user_image?user_image_id="+id)
+                .load("http://35.205.45.78/get_user_image?user_image_id="+id)
                 .into(profilePic);
 
         /*MapView mapView = (MapView) findViewById(R.id.map);
