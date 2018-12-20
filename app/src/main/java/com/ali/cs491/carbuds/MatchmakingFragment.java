@@ -158,13 +158,57 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         Log.d("CardStackView", "onCardDragging: d = " + direction.name() + ", r = " + ratio);
     }
 
+    private void like(){
+        int index = manager.getTopPosition()-1;
+        JSONObject match = null;
+        try {
+            match = jsonArray.getJSONObject(index);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("possible_match_id", match.getString("match_id"));
+            jsonObject.put("token", LoginActivity.token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(Connection.IP + Connection.LIKE_MATCH)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+                            //TODO:you dont have matchmaking now
+                        }
+                        try {
+                            jsonArray = new JSONArray(response);
+                            reload();
+                            //   matchmaking();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        String str = error.getErrorBody();
+                    }
+                });
+    }
     @Override
     public void onCardSwiped(Direction direction) {
+
+
         if(direction.equals(Direction.Right)){
-            //TODO begenirse nolacak
+         //   like();
+
         } else if(direction.equals(Direction.Left)){
             //begenmezse bir sey almayacak
-
+            //token
+            //match_id
         }
         if (manager.getTopPosition() == adapter.getItemCount() - 5) {
             paginate();
@@ -266,7 +310,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         rewind.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO:: 2. tiklamada patliyor yapilacak.
                int index = manager.getTopPosition();
                 JSONObject jsonObject = null;
                 try {
@@ -416,7 +459,12 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                 try {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     System.out.print(jsonObject.toString());
-                    String URL = "http://35.205.45.78/get_user_image?user_image_id=" + jsonObject.getString("driver_id");
+                    String URL;
+                    if(LoginActivity.userType.equals("driver")){
+                        URL = "http://35.205.45.78/get_user_image?user_image_id=" + jsonObject.getString("hitchhiker_id");
+                    } else {
+                        URL = "http://35.205.45.78/get_user_image?user_image_id=" + jsonObject.getString("driver_id");
+                    }
                     String name = jsonObject.getString("name");
                     String time = jsonObject.getString("trip_start_time");
                     spots.add(new Spot(name, time, URL));
@@ -426,8 +474,8 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                 }
             }
         }
-        spots.add(new Spot("Yasaka Shrine", "Kyoto", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
-       /* spots.add(new Spot("Fushimi Inari Shrine", "Kyoto", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
+       /* spots.add(new Spot("Yasaka Shrine", "Kyoto", "https://source.unsplash.com/Xq1ntWruZQI/600x800"));
+        spots.add(new Spot("Fushimi Inari Shrine", "Kyoto", "https://source.unsplash.com/NYyCqdBOKwc/600x800"));
         spots.add(new Spot("Bamboo Forest", "Kyoto", "https://source.unsplash.com/buF62ewDLcQ/600x800"));
         spots.add(new Spot("Brooklyn Bridge", "New York", "https://source.unsplash.com/THozNzxEP3g/600x800"));
         spots.add(new Spot("Empire State Building", "New York", "https://source.unsplash.com/USrZRcRS2Lw/600x800"));
