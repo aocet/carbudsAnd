@@ -20,6 +20,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.hootsuite.nachos.NachoTextView;
 
 import org.json.JSONException;
@@ -96,6 +98,8 @@ public class InitialDriverProfileActivity extends AppCompatActivity {
         CircleImageView profilePic = (CircleImageView)findViewById(R.id.profile);
         Glide.with(profilePic)
                 .load("http://35.205.45.78/get_user_image?user_image_id=" + user_id)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .apply(RequestOptions.skipMemoryCacheOf(true))
                 .into(profilePic)
                 .waitForLayout();
 
@@ -270,7 +274,7 @@ public class InitialDriverProfileActivity extends AppCompatActivity {
 
             if (success) {
                 writeShared("driver");
-                Intent intent = new Intent(InitialDriverProfileActivity.this,TypeSelectionActivity.class);
+                Intent intent = new Intent(InitialDriverProfileActivity.this,Main2Activity.class);
                 startActivity(intent);
             }
         }

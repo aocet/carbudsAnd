@@ -216,7 +216,7 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
 
             if (success) {
                 writeShared("hitchhiker");
-                Intent intent = new Intent(InitialHitchhikerProfileActivity.this,TypeSelectionActivity.class);
+                Intent intent = new Intent(InitialHitchhikerProfileActivity.this,Main2Activity.class);
                 startActivity(intent);
             }
         }

@@ -35,11 +35,6 @@ public class RoleSelectionActivity extends AppCompatActivity {
         driver_button = findViewById(R.id.driver_button);
         readShared();
 
-/*        if(!user_type.isEmpty()){
-            Intent intent = new Intent(RoleSelectionActivity.this,TypeSelectionActivity.class);
-            startActivity(intent);
-        }*/
-
         hitchhiker_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,7 +141,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
 
             String msg = setupURLConnection();
             Log.i("Carbuds",msg);
-            if(msg.equals("False")){
+            if(msg.equals("false\n")){
                 return false;
             } else {
                 return true;

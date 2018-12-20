@@ -55,8 +55,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         readShared();
         if(LoginActivity.user_id != -1){
-            Intent intent = new Intent(MainActivity.this,RoleSelectionActivity.class);
-            startActivity(intent);
+            if(LoginActivity.userType.equals(""))
+                startActivity(new Intent(MainActivity.this,RoleSelectionActivity.class));
+            else{
+                startActivity(new Intent(MainActivity.this,Main2Activity.class));
+            }
         }
         Button loginButton = findViewById(R.id.loginButton);
         Button signUpButton = findViewById(R.id.signUpButton);

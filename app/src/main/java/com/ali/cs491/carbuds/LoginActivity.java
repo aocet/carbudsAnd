@@ -32,10 +32,14 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
+import com.google.common.hash.HashCode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,6 +121,18 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         token = sharedPref.getString("token", "");
     }
     private void connection(String username, String mPassword){
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+            md.update(mPassword.getBytes("UTF-8"));
+            byte[] digest = md.digest();
+            mPassword = HashCode.fromBytes(digest).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject.put("username", username);

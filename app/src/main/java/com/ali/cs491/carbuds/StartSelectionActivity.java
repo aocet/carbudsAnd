@@ -61,7 +61,7 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
         markerOptions.position(latLng);
         markerOptions.title(addressText);
 
-        mMap.clear();
+        //mMap.clear();
         mMap.addMarker(markerOptions);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -100,7 +100,8 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
-                if ((keyCode == KeyEvent.KEYCODE_ENTER)) {
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     String g = searchBar.getText().toString();
 
                     Geocoder geocoder = new Geocoder(getBaseContext());

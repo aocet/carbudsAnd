@@ -33,10 +33,14 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
+import com.google.common.hash.HashCode;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -124,6 +128,16 @@ public class RegisterActivity extends AppCompatActivity {
                             String username, String gender, String device) {
         JSONObject jsonObject = new JSONObject();
         try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(password.getBytes("UTF-8"));
+            byte[] digest = md.digest();
+            password = HashCode.fromBytes(digest).toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        try {
             jsonObject.put("username", username);
             jsonObject.put("password", password);
             jsonObject.put("name", name);
@@ -150,6 +164,9 @@ public class RegisterActivity extends AppCompatActivity {
                             Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
                             startActivity(intent);
                             return;
+                        }
+                        if (str.equals("not bilkent\n")) {
+                            //TODO: show error for not bilkent mail
                         }
                         showProgress(false);
                         mPasswordView.setError("Register failed, try again");
