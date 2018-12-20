@@ -1,6 +1,7 @@
 package com.ali.cs491.carbuds;
 
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -16,8 +17,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 
 public class MapDialogFragment extends DialogFragment
@@ -59,15 +66,36 @@ public class MapDialogFragment extends DialogFragment
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
-        LatLng latLng = new LatLng(37.7688472,-122.4130859);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,11));
+        String intersectionPolyline = null;
+        try {
+            intersectionPolyline = jsonObject.getString("intersection_polyline");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        List<LatLng> polylines = PolyUtil.decode(intersectionPolyline);
+        PolylineOptions polyOptions = new PolylineOptions();
+
+        for (int i = 0; i < polylines.size(); i++) {
+            polyOptions.add(polylines.get(i));
+        }
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(polylines.get(0), 15));
+        polyOptions.color(Color.BLUE);
+        polyOptions.width(15);
+        Polyline line = googleMap.addPolyline(polyOptions);
 
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng);
-        markerOptions.title("Current Position");
+        markerOptions.position(polylines.get(0));
+        markerOptions.title("Start Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
+        mMap.addMarker(markerOptions);
+
+        markerOptions = new MarkerOptions();
+        markerOptions.position(polylines.get(polylines.size()-1));
+        markerOptions.title("End Position");
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(markerOptions);
     }
 

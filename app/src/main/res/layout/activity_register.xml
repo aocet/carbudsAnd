@@ -9,6 +9,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="@drawable/background_login"
     tools:context=".RegisterActivity">
 
     <!-- Register progress -->
@@ -42,7 +43,9 @@
                     android:hint="@string/prompt_name"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -57,7 +60,9 @@
                     android:hint="@string/prompt_surname"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -72,7 +77,9 @@
                     android:hint="@string/prompt_username"
                     android:inputType="textPersonName"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -87,7 +94,9 @@
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -105,7 +114,9 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -123,7 +134,9 @@
                     android:imeOptions="actionUnspecified"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:singleLine="true" />
+                    android:singleLine="true"
+                    android:textSize="20sp"
+                    android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
             <Spinner
