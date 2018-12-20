@@ -225,7 +225,17 @@ public class ProfileFragment extends Fragment {
                                 startActivity(intent);
                                 break;
                             }
-
+                            case "Set Trip":{
+                                if(user_type.equals("driver")){
+                                    RouteManager.setUserType(RouteManager.DRIVER);
+                                }
+                                else {
+                                    RouteManager.setUserType(RouteManager.HITCHHIKER);
+                                }
+                                Intent intent = new Intent(getActivity(), StartSelectionActivity.class);
+                                startActivity(intent);
+                                break;
+                            }
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
