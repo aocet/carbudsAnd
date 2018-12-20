@@ -32,14 +32,18 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ali.cs491.carbuds.MainActivity" />
         </activity>
-        <activity android:name=".TypeSelectionActivity" />
+        <activity android:name=".TypeSelectionActivity"
+            android:screenOrientation="portrait"
+        ></activity>
         <activity
             android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_settings" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -55,32 +59,52 @@
 
         <activity
             android:name=".StartSelectionActivity"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_selection" />
         <activity
             android:name=".MatchmakingActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RegisterActivity"
             android:label="@string/title_activity_register"
+            android:screenOrientation="portrait"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.ali.cs491.carbuds.MainActivity" />
         </activity>
-        <activity android:name=".DatePickerActivity" />
-        <activity android:name=".MatchListActivity" />
+        <activity
+            android:name=".DatePickerActivity"
+            android:screenOrientation="portrait"
+            ></activity>
+        <activity
+            android:name=".MatchListActivity"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".ChatActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".InfoMatchActivity" />
-        <activity android:name=".InitialHitchhikerProfileActivity" />
-        <activity android:name=".InitialDriverProfileActivity" />
-        <activity android:name=".RoleSelectionActivity"
+        <activity
+            android:name=".InfoMatchActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".InitialHitchhikerProfileActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".InitialDriverProfileActivity"
+            android:screenOrientation="portrait"></activity>>
+        <activity
+            android:name=".RoleSelectionActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".DriverProfilePageActivity" />
+        <activity
+            android:name=".DriverProfilePageActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Main2Activity"
             android:label="@string/title_activity_main2"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
     </application>
