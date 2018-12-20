@@ -39,6 +39,7 @@ public class Connection {
     public static final String GET_DRIVER_PROFILE = "get_driver_profile";
     public static final String GET_HITCHHIKER_PROFILE = "get_hitchhiker_profile";
     public static final String GET_MUSIC_PREFERENCES = "get_music_preferences";
+    public static final String UPLOAD_USER_IMAGE = "upload_user_image";
     private String msg;
     public Connection(){
         msg = "";

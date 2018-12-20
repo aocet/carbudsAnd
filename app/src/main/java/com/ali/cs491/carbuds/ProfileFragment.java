@@ -29,6 +29,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -41,7 +42,12 @@ import com.esafirm.imagepicker.model.Image;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -95,7 +101,7 @@ public class ProfileFragment extends Fragment {
     private View formView;
     private View progressView;
     private View v;
-
+    private Bitmap pp;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -273,10 +279,31 @@ public class ProfileFragment extends Fragment {
 
         return v;
     }
+    private void refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(this);
+        ft.attach(this);
+        ft.commit();
+    }
+    private void compress(File file) {
+        Bitmap pp = BitmapFactory.decodeFile(file.getAbsolutePath());
+        OutputStream os = null;
+        try {
+            os = new BufferedOutputStream(new FileOutputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        pp.compress(Bitmap.CompressFormat.JPEG, 75, os);
+        try {
+            os.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
-    private static void uploadImage(File file){
+    private void uploadImage(File file){
 
-        AndroidNetworking.upload("http://35.205.45.78/upload_user_image")
+        AndroidNetworking.upload(Connection.IP + Connection.UPLOAD_USER_IMAGE)
                 .addMultipartFile("pic",file)
                 .setTag("uploadTest")
                 .addMultipartParameter("user_image_id", Integer.toString(user_id))
@@ -288,20 +315,25 @@ public class ProfileFragment extends Fragment {
                         // do anything with progress
                     }
                 })
-                .getAsJSONObject(new JSONObjectRequestListener() {
+                .getAsString(new StringRequestListener() {
                     @Override
-                    public void onResponse(JSONObject response) {
-                        // do anything with response
-                        Log.d(TAG, response.toString());
+                    public void onResponse(String response) {
+                        if(response.equals("true\n")) {
+                            CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_fragment_pic);
+                            Bitmap pp = BitmapFactory.decodeFile(file.getAbsolutePath());
+                            if(pp != null){
+                                profilePic.setImageBitmap(pp);
+                                refresh();
+                            }
+                        }
                     }
+
                     @Override
-                    public void onError(ANError error) {
-                        // handle error
-                        Log.d(TAG, error.toString());
+                    public void onError(ANError anError) {
+                        String str = anError.getErrorBody();
                     }
                 });
     }
-
     private void selectImage(){
         ImagePicker imagePicker= ImagePicker.create(getActivity()).language("in") // Set image picker language
                 .returnMode(ReturnMode.ALL) // set whether pick action or camera action should return immediate result or not. Only works in single mode for image picker
@@ -314,21 +346,22 @@ public class ProfileFragment extends Fragment {
         imagePicker.single();
         imagePicker.limit(1) // max images can be selected (99 by default)
                 .showCamera(true) // show camera or not (true by default)
-                .imageDirectory("Camera")   // captured image directory name ("Camera" folder by default)
+                .imageDirectory("Camera")// captured image directory name ("Camera" folder by default)
                 .imageFullDirectory(Environment.getExternalStorageDirectory().getPath());
+
         startActivityForResult(imagePicker.getIntent(getActivity()),111);// can be full path
     }
 
     @Override
     public void onActivityResult(int requestCode, final int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 111) {
             images = (ArrayList<Image>) ImagePicker.getImages(data);
             File imgFile = new File(images.get(0).getPath());
             if(imgFile.exists()){
-                //Bitmap pp = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                compress(imgFile);
                 uploadImage(imgFile);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                ft.detach(this).attach(this).commit();
+                refresh();
             }
             return;
         }
