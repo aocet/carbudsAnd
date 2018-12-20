@@ -1,6 +1,9 @@
 package com.ali.cs491.carbuds;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -9,9 +12,12 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.google.android.gms.maps.SupportMapFragment;
+import android.support.v4.app.DialogFragment;
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
@@ -74,7 +80,7 @@ public class InfoMatchActivity extends FragmentActivity {
         }
 
         TextView preferencesView = (TextView) findViewById(R.id.preferencesView);
-        AndroidNetworking.post("http://10.0.2.2:5000/get_music_preferences")
+        AndroidNetworking.post(Connection.IP + Connection.GET_MUSIC_PREFERENCES )
                 .addJSONObjectBody(jsonObject) // posting any type of file
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
@@ -113,7 +119,6 @@ public class InfoMatchActivity extends FragmentActivity {
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .apply(RequestOptions.skipMemoryCacheOf(true))
                 .into(profilePic);
-
         /*MapView mapView = (MapView) findViewById(R.id.map);
 
         mapView.onCreate(savedInstanceState);
@@ -145,5 +150,22 @@ public class InfoMatchActivity extends FragmentActivity {
                 mapView.onResume();
             }
         });*/
+        Button openMap = findViewById(R.id.openMapsButton);
+        openMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                JSONObject jsonObject1 = new JSONObject();
+                try {
+                    MapDialogFragment mapDialogFragment = new MapDialogFragment();
+
+                    jsonObject.put("intersection_polyline",intersectionPolyline);
+                    mapDialogFragment.setCandidateInfo(jsonObject);
+                    mapDialogFragment.setCancelable(true);
+                    mapDialogFragment.show(getSupportFragmentManager(), "mapsfragment");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
