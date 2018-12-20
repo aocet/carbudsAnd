@@ -109,6 +109,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
                 intent = new Intent(RoleSelectionActivity.this, Main2Activity.class);
             }
             startActivity(intent);
+            finish();
         }
 
         @Override

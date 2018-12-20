@@ -102,6 +102,11 @@ public class MapDialogFragment extends DialogFragment
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
+        SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapsFragment);
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(mapFragment);
+        ft.attach(mapFragment);
+        ft.commit();
         dialog.cancel();
     }
     public void setCandidateInfo(JSONObject jsonObject){
