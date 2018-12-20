@@ -8,4 +8,7 @@
 
     <color name="brown_pressed">#7c5946</color>
     <color name="brown_normal">#765340</color>
+
+    <color name="mag_pressed">#3a3569</color>
+    <color name="mag_normal">#363069</color>
 </resources>

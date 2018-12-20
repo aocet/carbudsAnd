@@ -75,7 +75,8 @@
         <activity android:name=".InfoMatchActivity" />
         <activity android:name=".InitialHitchhikerProfileActivity" />
         <activity android:name=".InitialDriverProfileActivity" />
-        <activity android:name=".RoleSelectionActivity" />
+        <activity android:name=".RoleSelectionActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".DriverProfilePageActivity" />
         <activity
             android:name=".Main2Activity"

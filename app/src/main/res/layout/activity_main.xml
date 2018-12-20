@@ -4,25 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:background="@drawable/login_signup_background">
 
     <Button
         android:id="@+id/loginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="206dp"
+        android:layout_height="42dp"
         android:layout_marginStart="148dp"
         android:layout_marginTop="164dp"
-        android:text="Login"
+        android:layout_marginEnd="148dp"
+        android:background="@drawable/blue_btn_drawable"
+        android:text="LOGIN"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/signUpButton"
-        android:layout_width="wrap_content"
+        android:layout_width="206dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="148dp"
         android:layout_marginTop="42dp"
-        android:text="Sign Up"
+        android:layout_marginEnd="148dp"
+        android:text="SIGN UP"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/mag_btn_drawable"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 </android.support.constraint.ConstraintLayout>
