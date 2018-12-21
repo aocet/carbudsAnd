@@ -33,6 +33,7 @@ import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.google.common.hash.HashCode;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -133,10 +134,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             e.printStackTrace();
         }
 
+        String fcm_token = FirebaseInstanceId.getInstance().getToken();
+
         JSONObject jsonObject = new JSONObject();
         try{
             jsonObject.put("username", username);
             jsonObject.put("password", mPassword);
+            jsonObject.put("fcm_token", fcm_token);
         } catch(JSONException e){
             e.printStackTrace();
         }

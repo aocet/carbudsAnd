@@ -108,6 +108,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
+        <service android:name=".MyFirebaseMessagingService" />
     </application>
 
 </manifest>
