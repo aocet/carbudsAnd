@@ -1,11 +1,15 @@
 package com.ali.cs491.carbuds;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,6 +43,7 @@ public class MatchListFragment extends Fragment {
 
     List<ChatListUser> users = new ArrayList<ChatListUser>();
     MatchListAdapter mMessageListAdapter;
+    private Fragment f;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
@@ -76,7 +81,19 @@ public class MatchListFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
         v = this.getView();
+        f = this;
 
+
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver((mMessageReceiver),
+                new IntentFilter("message_list")
+        );
         ListView mListView = (ListView) v.findViewById(R.id.list);
         mMessageListAdapter =new MatchListAdapter(getActivity(), users);
         mListView.setAdapter(mMessageListAdapter);
@@ -106,8 +123,25 @@ public class MatchListFragment extends Fragment {
             }
 
         });
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
+    }
 
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            users = new ArrayList<ChatListUser>();
+            refresh();
+        }
+    };
+
+    private void refresh(){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(f).attach(f).commit();
     }
 
     public class MatchListTask extends AsyncTask<Void, Void, Boolean> {
