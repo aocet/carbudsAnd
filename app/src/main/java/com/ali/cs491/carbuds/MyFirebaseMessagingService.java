@@ -13,6 +13,7 @@ import android.media.RingtoneManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -28,12 +29,26 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
     private int numMessages = 0;
 
+    private LocalBroadcastManager broadcaster;
+
+    @Override
+    public void onCreate() {
+        broadcaster = LocalBroadcastManager.getInstance(this);
+    }
+
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         Map<String, String> data = remoteMessage.getData();
-        Log.d("FROM", remoteMessage.getFrom());
+        Log.i("FROM", remoteMessage.getFrom());
+
+        LocalBroadcastManager broadcaster = LocalBroadcastManager.getInstance(getBaseContext());
+
+
+        broadcaster.sendBroadcast( new Intent("message_list"));
+
+
         sendNotification(notification, data);
     }
 
@@ -41,7 +56,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Bundle bundle = new Bundle();
         bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
 
-        Intent intent = new Intent(this, TypeSelectionActivity.class);
+        Intent intent = new Intent(this, Main2Activity.class);
         intent.putExtras(bundle);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);

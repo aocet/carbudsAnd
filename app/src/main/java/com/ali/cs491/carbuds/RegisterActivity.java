@@ -149,7 +149,7 @@ public class RegisterActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         //TODO: replace ip
-        AndroidNetworking.post("http://35.205.45.78/signup")
+        AndroidNetworking.post(Connection.IP + Connection.SIGNUP)
                 .addJSONObjectBody(jsonObject) // posting any type of file
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)

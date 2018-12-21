@@ -17,6 +17,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -239,7 +240,7 @@ public class ProfileFragment extends Fragment {
                         String menuTitle = menuItem.getTitle().toString();
 
                         // close drawer when item is tapped
-                        mDrawerLayout.closeDrawers();
+                        mDrawerLayout.closeDrawer(navigationView);
 
                         switch (menuTitle){
                             case "Change Role":{
@@ -266,12 +267,27 @@ public class ProfileFragment extends Fragment {
                             }
                             case "Cancel Current Trip":{
                                 CancelTrip();
+                                refresh();
+                                break;
+                            }
+                            case "Show Current Trip":{
+                                JSONObject jsonObject1 = new JSONObject();
+                                try {
+                                    MapDialogFragment mapDialogFragment = new MapDialogFragment();
+
+                                    jsonObject1.put("intersection_polyline",tripPolyline);
+                                    mapDialogFragment.setCandidateInfo(jsonObject1);
+                                    mapDialogFragment.setCancelable(true);
+                                    mapDialogFragment.show(getFragmentManager(), "mapsfragment");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                             }
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-                        refresh();
+                        //refresh();
                         return true;
                     }
                 });
