@@ -267,6 +267,7 @@ public class ProfileFragment extends Fragment {
                             }
                             case "Cancel Current Trip":{
                                 CancelTrip();
+                                refresh();
                                 break;
                             }
                             case "Show Current Trip":{
@@ -286,7 +287,7 @@ public class ProfileFragment extends Fragment {
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-                        refresh();
+                        //refresh();
                         return true;
                     }
                 });

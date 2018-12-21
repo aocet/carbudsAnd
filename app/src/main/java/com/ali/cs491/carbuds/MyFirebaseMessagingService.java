@@ -34,6 +34,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         RemoteMessage.Notification notification = remoteMessage.getNotification();
         Map<String, String> data = remoteMessage.getData();
         Log.d("FROM", remoteMessage.getFrom());
+
+
         sendNotification(notification, data);
     }
 
@@ -41,7 +43,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Bundle bundle = new Bundle();
         bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
 
-        Intent intent = new Intent(this, TypeSelectionActivity.class);
+        Intent intent = new Intent(this, Main2Activity.class);
         intent.putExtras(bundle);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
