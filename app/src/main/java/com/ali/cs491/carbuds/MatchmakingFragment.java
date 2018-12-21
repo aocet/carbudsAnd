@@ -203,7 +203,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
 
 
         if(direction.equals(Direction.Right)){
-         //   like();
+            like();
 
         } else if(direction.equals(Direction.Left)){
             //begenmezse bir sey almayacak
