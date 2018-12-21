@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             e.printStackTrace();
         }
         //TODO: replace ip
-        AndroidNetworking.post("http://35.205.45.78/login")
+        AndroidNetworking.post(Connection.IP+ Connection.LOGIN)
                 .addJSONObjectBody(jsonObject) // posting any type of file
                 .setTag("test")
                 .setPriority(Priority.MEDIUM)
