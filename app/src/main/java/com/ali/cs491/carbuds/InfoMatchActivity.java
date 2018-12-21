@@ -131,13 +131,13 @@ public class InfoMatchActivity extends FragmentActivity {
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ImagePopup imagePopup = new ImagePopup(InfoMatchActivity.this);
+                /*ImagePopup imagePopup = new ImagePopup(InfoMatchActivity.this);
                 imagePopup.setBackgroundColor(Color.BLACK);
                 imagePopup.setImageOnClickClose(true);
                 ImageView imageView = new ImageView(InfoMatchActivity.this);
                 imagePopup.initiatePopup(imageView.getDrawable());
                 imagePopup.initiatePopupWithGlide("http://35.205.45.78/get_user_image?user_image_id="+id);
-                imagePopup.viewPopup();
+                imagePopup.viewPopup();*/
             }
         });
         /*MapView mapView = (MapView) findViewById(R.id.map);
