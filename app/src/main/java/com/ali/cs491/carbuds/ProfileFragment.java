@@ -264,11 +264,8 @@ public class ProfileFragment extends Fragment {
                                 startActivity(intent);
                                 break;
                             }
-                            case "Cancel Trip":{
+                            case "Cancel Current Trip":{
                                 CancelTrip();
-                                navMenu.findItem(R.id.cancel_trip).setVisible(false);
-                                navMenu.findItem(R.id.set_trip).setVisible(true);
-                                navMenu.findItem(R.id.show_trip).setVisible(false);
                                 break;
                             }
                         }
