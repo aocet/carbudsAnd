@@ -43,7 +43,6 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
     private LatLng latLng;
     private String addressText,addMarker;
     private MarkerOptions markerOptions;
-
     protected void search(List<Address> addresses) {
 
         Address address = (Address) addresses.get(0);

@@ -23,36 +23,56 @@ public class DatePickerActivity extends AppCompatActivity {
     private Button datePicker;
     private Button timePicker;
     private Button setTrip;
-    public static Date date;
-    public static void setDate(){
-        Date dt = new Date();
+    public static Calendar calendar;
+
+    public void setDate(){
+        calendar = Calendar.getInstance();
+    }
+
+    public void setNewDate(int year, int month, int day) {
+        this.calendar.set(Calendar.YEAR, year);
+        this.calendar.set(Calendar.MONTH, month);
+        this.calendar.set(Calendar.DAY_OF_MONTH, day);
+    }
+
+    public void setNewTime(int hour, int minute) {
+        this.calendar.set(Calendar.HOUR_OF_DAY, hour);
+        this.calendar.set(Calendar.MINUTE, minute);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_date_picker);
-        Date date = new Date();
+        calendar = Calendar.getInstance();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         datePicker = findViewById(R.id.datePickerButton);
         timePicker = findViewById(R.id.timePickerButton);
         setTrip    = findViewById(R.id.pickFinishButton);
-        datePicker.setText(dateFormat.format(date));
-        timePicker.setText(timeFormat.format(date));
+        datePicker.setText(dateFormat.format(calendar.getTime()));
+        timePicker.setText(timeFormat.format(calendar.getTime()));
     }
-    private void sendRoute(){
+
+    public void changeDateButton() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        datePicker.setText(dateFormat.format(calendar.getTime()));
+    }
+
+    public void ChangeTimeButton() {
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        timePicker.setText(timeFormat.format(calendar.getTime()));
+    }
+    public void sendRoute(){
         Trip trip = RouteManager.getTrip();
         JSONObject jsonObj = new JSONObject();
-
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date = new Date();
-        System.out.println(formatter.format(date));
+        System.out.println(formatter.format(calendar.getTime()));
         try {
             jsonObj.put("token", LoginActivity.token );
             jsonObj.put("user_id", LoginActivity.user_id); // get id
             jsonObj.put("trip_start_point", RouteManager.getPointString(trip.getStartPoint()));
             jsonObj.put("trip_end_point", RouteManager.getPointString(trip.getEndPoint()));
-            jsonObj.put("trip_start_time", formatter.format(date));
+            jsonObj.put("trip_start_time", formatter.format(calendar.getTime()));
 
             String URL;
             if(trip.getUserType() == RouteManager.DRIVER) {
@@ -95,7 +115,7 @@ public class DatePickerActivity extends AppCompatActivity {
         newFragment.show(getSupportFragmentManager(), "time picker");
     }
     public void finish(View v){
-        RouteManager.setDate(date);
+        RouteManager.setDate(calendar);
         sendRoute();
     }
 }

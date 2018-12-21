@@ -2,6 +2,7 @@ package com.ali.cs491.carbuds;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class RouteManager {
@@ -9,7 +10,7 @@ public class RouteManager {
     private static LatLng startPoint;
     private static LatLng endPoint;
     private static int userType;
-    private static Date date;
+    private static Calendar date;
     public static final int  DRIVER = 0;
     public static final int  HITCHHIKER = 1;
 
@@ -25,7 +26,7 @@ public class RouteManager {
 
         // todo: send trip to server
     }
-    public static void setDate(Date dt){
+    public static void setDate(Calendar dt){
         date = dt;
         trip = new Trip(startPoint, endPoint, userType,date);
     }

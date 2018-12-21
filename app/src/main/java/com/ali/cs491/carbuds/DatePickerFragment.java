@@ -10,6 +10,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.Date;
 
 
 public class DatePickerFragment extends DialogFragment {
@@ -43,6 +44,8 @@ public class DatePickerFragment extends DialogFragment {
                     Toast.makeText(getActivity(), "selected date is " + view.getYear() +
                             " / " + (view.getMonth()+1) +
                             " / " + view.getDayOfMonth(), Toast.LENGTH_SHORT).show();
+                    ((DatePickerActivity)getActivity()).setNewDate(view.getYear(), view.getMonth(), view.getDayOfMonth());
+                    ((DatePickerActivity)getActivity()).changeDateButton();
                 }
             };
     private TimePickerDialog.OnTimeSetListener timeSetListener =
@@ -53,6 +56,8 @@ public class DatePickerFragment extends DialogFragment {
                                     + view.getHour() +
                                     " / " + view.getMinute()
                             , Toast.LENGTH_SHORT).show();
+                    ((DatePickerActivity)getActivity()).setNewTime(view.getHour(), view.getMinute());
+                    ((DatePickerActivity)getActivity()).ChangeTimeButton();
                 }
             };
 }
