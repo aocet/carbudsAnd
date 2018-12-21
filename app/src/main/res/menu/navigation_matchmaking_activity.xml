@@ -5,6 +5,9 @@
         android:id="@+id/set_trip"
         android:title="Set Trip"/>
     <item
+        android:id="@+id/show_trip"
+        android:title="Show Current Trip"/>
+    <item
         android:id="@+id/cancel_trip"
         android:title="Cancel Current Trip"/>
     <item

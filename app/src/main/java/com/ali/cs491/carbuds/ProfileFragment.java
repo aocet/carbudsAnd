@@ -109,11 +109,13 @@ public class ProfileFragment extends Fragment {
     private View progressView;
     private View v;
     private Bitmap pp;
+    private Fragment f;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.fragment_profile, container, false);
+        f = this;
         readShared();
 
         passengerSeatView = v.findViewById(R.id.passenger_seat_view);
@@ -213,7 +215,9 @@ public class ProfileFragment extends Fragment {
                         startActivity(intent);
                         break;
                     }
+
                 }
+                refresh();
             }
         });
 
@@ -264,12 +268,13 @@ public class ProfileFragment extends Fragment {
                                 CancelTrip();
                                 navMenu.findItem(R.id.cancel_trip).setVisible(false);
                                 navMenu.findItem(R.id.set_trip).setVisible(true);
+                                navMenu.findItem(R.id.show_trip).setVisible(false);
                                 break;
                             }
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-
+                        refresh();
                         return true;
                     }
                 });
@@ -305,9 +310,7 @@ public class ProfileFragment extends Fragment {
     }
     private void refresh(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(this);
-        ft.attach(this);
-        ft.commit();
+        ft.detach(f).attach(f).commit();
     }
     private void compress(File file) {
         Bitmap pp = BitmapFactory.decodeFile(file.getAbsolutePath());
@@ -446,6 +449,7 @@ public class ProfileFragment extends Fragment {
                             tripStartTimeView2.setVisibility(View.GONE);
                             navMenu.findItem(R.id.cancel_trip).setVisible(false);
                             navMenu.findItem(R.id.set_trip).setVisible(true);
+                            navMenu.findItem(R.id.show_trip).setVisible(false);
                             isTrip = false;
                         }
                         try {
@@ -458,6 +462,7 @@ public class ProfileFragment extends Fragment {
                             isTrip = true;
                             navMenu.findItem(R.id.cancel_trip).setVisible(true);
                             navMenu.findItem(R.id.set_trip).setVisible(false);
+                            navMenu.findItem(R.id.show_trip).setVisible(true);
 
 
                         } catch (JSONException e) {
