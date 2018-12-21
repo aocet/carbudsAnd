@@ -42,6 +42,8 @@ public class Connection {
     public static final String UPLOAD_USER_IMAGE = "upload_user_image";
     public static final String LIKE_MATCH = "like_match";
     public static final String DISLIKE_MATCH = "dislike_match";
+    public static final String CHECK_ACTIVE_TRIP = "check_active_trip";
+    public static final String CANCEL_TRIP = "cancel_trip";
 
     private String msg;
     public Connection(){

@@ -18,6 +18,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -91,6 +93,11 @@ public class ProfileFragment extends Fragment {
     private TextView carBrandView2;
     private TextView licensePlateView2;
 
+    private TextView tripStartTimeView;
+    private TextView tripStartTimeView2;
+    private String tripPolyline;
+    private Boolean isTrip = false;
+
     private DrawerLayout mDrawerLayout;
 
     private static int user_id;
@@ -117,6 +124,11 @@ public class ProfileFragment extends Fragment {
         musicPreferenceView = v.findViewById(R.id.music_preference_view);
         userNameView = v.findViewById(R.id.name);
         currentRoleView = v.findViewById(R.id.current_role_view);
+
+        tripStartTimeView = v.findViewById(R.id.trip_start_time);
+        tripStartTimeView2 = v.findViewById(R.id.trip_start_time_view);
+        tripStartTimeView.setVisibility(View.GONE);
+        tripStartTimeView2.setVisibility(View.GONE);
 
         licensePlateView2 = v.findViewById(R.id.license_plate);
         passengerSeatView2 = v.findViewById(R.id.passenger_seat);
@@ -205,9 +217,15 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+
+
         mDrawerLayout = v.findViewById(R.id.profile_drawer);
 
         NavigationView navigationView = v.findViewById(R.id.nav_view);
+        Menu navMenu = navigationView.getMenu();
+
+        CheckAndRetrieveCurrentTrip(navMenu);
+
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -240,6 +258,12 @@ public class ProfileFragment extends Fragment {
                                 }
                                 Intent intent = new Intent(getActivity(), StartSelectionActivity.class);
                                 startActivity(intent);
+                                break;
+                            }
+                            case "Cancel Trip":{
+                                CancelTrip();
+                                navMenu.findItem(R.id.cancel_trip).setVisible(false);
+                                navMenu.findItem(R.id.set_trip).setVisible(true);
                                 break;
                             }
                         }
@@ -395,6 +419,97 @@ public class ProfileFragment extends Fragment {
         user_name = sharedPref.getString("name", "");
         user_type = sharedPref.getString("type", "");
 
+    }
+
+    public void CheckAndRetrieveCurrentTrip(Menu navMenu){
+        String URL ;
+
+        URL = Connection.IP + Connection.CHECK_ACTIVE_TRIP;
+
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("token", token);
+            jsonObject.put("type", user_type);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(URL)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+                            tripStartTimeView.setVisibility(View.GONE);
+                            tripStartTimeView2.setVisibility(View.GONE);
+                            navMenu.findItem(R.id.cancel_trip).setVisible(false);
+                            navMenu.findItem(R.id.set_trip).setVisible(true);
+                            isTrip = false;
+                        }
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            tripStartTimeView.setVisibility(View.VISIBLE);
+                            tripStartTimeView2.setVisibility(View.VISIBLE);
+                            tripPolyline = jsonObj.getString("destination_polyline");
+                            String tripStartTime = jsonObj.getString("trip_start_time");
+                            tripStartTimeView2.setText(tripStartTime);
+                            isTrip = true;
+                            navMenu.findItem(R.id.cancel_trip).setVisible(true);
+                            navMenu.findItem(R.id.set_trip).setVisible(false);
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        String str = error.getErrorBody();
+                    }
+                });
+    }
+
+    public void CancelTrip(){
+        String URL ;
+
+        URL = Connection.IP + Connection.CANCEL_TRIP;
+
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("token", token);
+            jsonObject.put("type", user_type);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(URL)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+
+                        }
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            tripStartTimeView.setVisibility(View.GONE);
+                            tripStartTimeView2.setVisibility(View.GONE);
+                            isTrip = false;
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        String str = error.getErrorBody();
+                    }
+                });
     }
 
     public class GetDriverProfileTask extends AsyncTask<Void, Void, Boolean> {
