@@ -127,5 +127,7 @@ public class Main2Activity extends AppCompatActivity {
             // Show 3 total pages.
             return 3;
         }
+
+
     }
 }

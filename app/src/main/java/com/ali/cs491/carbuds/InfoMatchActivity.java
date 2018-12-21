@@ -2,10 +2,14 @@ package com.ali.cs491.carbuds;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -13,9 +17,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.ceylonlabs.imageviewpopup.ImagePopup;
 import com.google.android.gms.maps.SupportMapFragment;
 import android.support.v4.app.DialogFragment;
 import com.androidnetworking.AndroidNetworking;
@@ -119,6 +128,18 @@ public class InfoMatchActivity extends FragmentActivity {
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
                 .apply(RequestOptions.skipMemoryCacheOf(true))
                 .into(profilePic);
+        profilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ImagePopup imagePopup = new ImagePopup(InfoMatchActivity.this);
+                imagePopup.setBackgroundColor(Color.BLACK);
+                imagePopup.setImageOnClickClose(true);
+                ImageView imageView = new ImageView(InfoMatchActivity.this);
+                imagePopup.initiatePopup(imageView.getDrawable());
+                imagePopup.initiatePopupWithGlide("http://35.205.45.78/get_user_image?user_image_id="+id);
+                imagePopup.viewPopup();
+            }
+        });
         /*MapView mapView = (MapView) findViewById(R.id.map);
 
         mapView.onCreate(savedInstanceState);

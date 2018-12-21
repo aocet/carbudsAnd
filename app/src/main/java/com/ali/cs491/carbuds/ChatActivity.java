@@ -75,6 +75,7 @@ public class ChatActivity extends AppCompatActivity {
         String tripStartTime = intent.getStringExtra("tripStartTime");
         String startPoint = intent.getStringExtra("startPoint");
         String endPoint = intent.getStringExtra("endPoint");
+        Boolean isDriver = intent.getBooleanExtra("isDriver", false);
 
         EXCHANGE_NAME = exchange;
         QUEUE_NAME = queue;
@@ -189,6 +190,7 @@ public class ChatActivity extends AppCompatActivity {
                 intent.putExtra("tripStartTime", tripStartTime);
                 intent.putExtra("startPoint", startPoint);
                 intent.putExtra("endPoint", endPoint);
+                intent.putExtra("isDriver", isDriver);
                 startActivity(intent);
             }
         });

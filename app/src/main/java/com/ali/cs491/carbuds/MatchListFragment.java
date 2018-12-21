@@ -101,7 +101,7 @@ public class MatchListFragment extends Fragment {
                 intent.putExtra("tripStartTime", us.getTripStart());
                 intent.putExtra("startPoint", us.getStartPoint());
                 intent.putExtra("endPoint", us.getEndPoint());
-                intent.putExtra("endPoint", us.isDriver());
+                intent.putExtra("isDriver", us.isDriver());
                 getActivity().startActivity(intent);
             }
 
