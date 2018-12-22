@@ -37,8 +37,8 @@ public class MatchListFragment extends Fragment {
 
     private View v;
 
-    int USER_ID = LoginActivity.user_id;
-    String TOKEN = LoginActivity.token;
+    int USER_ID = User.user_id;
+    String TOKEN = User.token;
     private MatchListTask mMatchTask = null;
 
     List<ChatListUser> users = new ArrayList<ChatListUser>();

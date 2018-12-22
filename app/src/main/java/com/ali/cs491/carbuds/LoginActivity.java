@@ -49,9 +49,6 @@ import java.util.List;
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
 
-    public static String token;
-    public static int user_id;
-    public static String userType;
     // UI references.
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
@@ -118,8 +115,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
     public void readShared(){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
-        user_id = sharedPref.getInt("user_id", -1);
-        token = sharedPref.getString("token", "");
+        User.user_id = sharedPref.getInt("user_id", -1);
+        User.token = sharedPref.getString("token", "");
     }
     private void connection(String username, String mPassword){
         MessageDigest md = null;
@@ -161,10 +158,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         }
                         try {
                             JSONObject response = new JSONObject(str);
-                            token = response.getString("token");
-                            user_id = response.getInt("user_id");
-                            String user_name = response.getString("name");
-                            writeShared(token, user_id, user_name);
+                            User.token = response.getString("token");
+                            User.user_id = response.getInt("user_id");
+                            User.username = response.getString("name");
+                            writeShared(User.token, User.user_id, User.username);
 
                             showProgress(false);
                             Intent intent = new Intent(LoginActivity.this,RoleSelectionActivity.class);

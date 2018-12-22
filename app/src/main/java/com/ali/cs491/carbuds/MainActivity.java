@@ -45,17 +45,17 @@ public class MainActivity extends AppCompatActivity {
     }
     public void readShared(){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
-        LoginActivity.user_id = sharedPref.getInt("user_id", -1);
-        LoginActivity.token = sharedPref.getString("token", "");
-        LoginActivity.userType =  sharedPref.getString("type", "");
+        User.user_id = sharedPref.getInt("user_id", -1);
+        User.token = sharedPref.getString("token", "");
+        User.userType =  sharedPref.getString("type", "");
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         readShared();
-        if(LoginActivity.user_id != -1){
-            if(LoginActivity.userType.equals(""))
+        if(User.user_id != -1){
+            if(User.userType.equals(""))
                 startActivity(new Intent(MainActivity.this,RoleSelectionActivity.class));
             else{
                 startActivity(new Intent(MainActivity.this,Main2Activity.class));

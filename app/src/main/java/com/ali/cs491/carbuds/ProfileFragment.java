@@ -17,31 +17,26 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
-import com.androidnetworking.interfaces.JSONObjectRequestListener;
 import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.signature.ObjectKey;
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
 import com.esafirm.imagepicker.model.Image;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -101,10 +96,6 @@ public class ProfileFragment extends Fragment {
 
     private DrawerLayout mDrawerLayout;
 
-    private static int user_id;
-    public static String token;
-    private static String user_name;
-    private static String user_type;
 
     private View formView;
     private View progressView;
@@ -138,7 +129,7 @@ public class ProfileFragment extends Fragment {
         carModelView2 = v.findViewById(R.id.car_model);
         carBrandView2 = v.findViewById(R.id.car_brand);
 
-        switch (user_type) {
+        switch (User.userType) {
             case "driver": {
                 passengerSeatView.setVisibility(View.VISIBLE);
                 carBrandView.setVisibility(View.VISIBLE);
@@ -175,9 +166,9 @@ public class ProfileFragment extends Fragment {
             }
         }
 
-        currentRoleView.setText(user_type);
+        currentRoleView.setText(User.userType);
 
-        switch (user_type) {
+        switch (User.userType) {
             case "driver": {
                 ProfileFragment.GetDriverProfileTask task = new ProfileFragment.GetDriverProfileTask();
                 task.execute((Void) null);
@@ -199,7 +190,7 @@ public class ProfileFragment extends Fragment {
         editProfileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (user_type) {
+                switch (User.userType) {
                     case "driver": {
                         Intent intent = new Intent(getActivity(), InitialDriverProfileActivity.class);
                         startActivity(intent);
@@ -255,7 +246,7 @@ public class ProfileFragment extends Fragment {
                                 break;
                             }
                             case "Set Trip":{
-                                if(user_type.equals("driver")){
+                                if(User.userType.equals("driver")){
                                     RouteManager.setUserType(RouteManager.DRIVER);
                                 }
                                 else {
@@ -293,7 +284,7 @@ public class ProfileFragment extends Fragment {
                 });
 
         CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_fragment_pic);
-        String loadUrl = "http://35.205.45.78/get_user_image?user_image_id=" + user_id;
+        String loadUrl = "http://35.205.45.78/get_user_image?user_image_id=" + User.user_id;
         Glide.with(profilePic)
                 .load(loadUrl)
                 .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
@@ -346,7 +337,7 @@ public class ProfileFragment extends Fragment {
         AndroidNetworking.upload(Connection.IP + Connection.UPLOAD_USER_IMAGE)
                 .addMultipartFile("pic",file)
                 .setTag("uploadTest")
-                .addMultipartParameter("user_image_id", Integer.toString(user_id))
+                .addMultipartParameter("user_image_id", Integer.toString(User.user_id))
                 .setPriority(Priority.HIGH)
                 .build()
                 .setUploadProgressListener(new UploadProgressListener() {
@@ -430,10 +421,10 @@ public class ProfileFragment extends Fragment {
 
     public void readShared() {
         SharedPreferences sharedPref = getActivity().getSharedPreferences("SHARED", Context.MODE_PRIVATE);
-        user_id = sharedPref.getInt("user_id", -1);
-        token = sharedPref.getString("token", "");
-        user_name = sharedPref.getString("name", "");
-        user_type = sharedPref.getString("type", "");
+        User.user_id = sharedPref.getInt("user_id", -1);
+        User.token = sharedPref.getString("token", "");
+        User.username = sharedPref.getString("name", "");
+        User.username = sharedPref.getString("type", "");
 
     }
 
@@ -444,8 +435,8 @@ public class ProfileFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try{
-            jsonObject.put("token", token);
-            jsonObject.put("type", user_type);
+            jsonObject.put("token", User.token);
+            jsonObject.put("type", User.userType);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -496,8 +487,8 @@ public class ProfileFragment extends Fragment {
 
         JSONObject jsonObject = new JSONObject();
         try{
-            jsonObject.put("token", token);
-            jsonObject.put("type", user_type);
+            jsonObject.put("token", User.token);
+            jsonObject.put("type", User.userType);
         } catch(JSONException e){
             e.printStackTrace();
         }
@@ -549,7 +540,7 @@ public class ProfileFragment extends Fragment {
 
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("token", token);
+                jsonObject.put("token", User.token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -639,7 +630,7 @@ public class ProfileFragment extends Fragment {
 
             JSONObject jsonObject = new JSONObject();
             try {
-                jsonObject.put("token", token);
+                jsonObject.put("token", User.token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

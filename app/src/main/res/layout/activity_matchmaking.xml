@@ -8,8 +8,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:orientation="vertical"
+        android:id="@+id/no_match"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <Button
+            android:text="RELOAD"
+            android:id="@+id/no_match_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
     <LinearLayout
         android:orientation="vertical"
+        android:id="@+id/matchmaking_cards"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

@@ -24,7 +24,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ceylonlabs.imageviewpopup.ImagePopup;
+
 import com.google.android.gms.maps.SupportMapFragment;
 import android.support.v4.app.DialogFragment;
 import com.androidnetworking.AndroidNetworking;
@@ -66,7 +66,6 @@ public class InfoMatchActivity extends FragmentActivity {
         setContentView(R.layout.activity_info_match);
 
 
-
         Intent intent = getIntent();
         int id = intent.getIntExtra("user_id", -1);
         String name = intent.getStringExtra("name");
@@ -81,7 +80,7 @@ public class InfoMatchActivity extends FragmentActivity {
 
         JSONObject jsonObject = new JSONObject();
         try{
-            jsonObject.put("token", LoginActivity.token);
+            jsonObject.put("token", User.token);
             jsonObject.put("user_id", id);
             jsonObject.put("user_type", isDriver);
         } catch(JSONException e){

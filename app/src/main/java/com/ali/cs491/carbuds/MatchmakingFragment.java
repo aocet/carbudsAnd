@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.androidnetworking.AndroidNetworking;
@@ -51,6 +53,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
      */
     public static MatchmakingFragment newInstance(int sectionNumber) {
         MatchmakingFragment fragment = new MatchmakingFragment();
+        fragment.currentMatchCount = 0;
         fragment.getUser_type();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
@@ -67,6 +70,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private TextView userNameView;
     private TextView currentRoleView;
     private JSONArray jsonArray;
+    public int currentMatchCount;
     private  int user_id;
     public  String token;
     private  String user_name;
@@ -86,20 +90,39 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private CardStackLayoutManager manager;
     private CardStackAdapter adapter;
     private CardStackView cardStackView;
-
+    private View noMatchView;
+    private View cardsView;
+    private Button noMatchButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         v = inflater.inflate(R.layout.activity_matchmaking, container, false);
+        noMatchView =   v.findViewById(R.id.no_match);
+        cardsView =  v.findViewById(R.id.matchmaking_cards);
+        noMatchButton = v.findViewById(R.id.no_match_button);
+        noMatchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
+        if(currentMatchCount == 0){
+            showNoMatch(true);
+        } else {
+            showNoMatch(false);
+        }
         //setupNavigation(v);
         initialize(v);
         setupButton(v);
         return v;
     }
+    private void showNoMatch(boolean show){
+        noMatchView.setVisibility(show ? View.VISIBLE: View.GONE);
+        cardsView.setVisibility(show? View.GONE:View.VISIBLE);
+    }
     private void getUser_type(){
-        String token = LoginActivity.token;
-        String usertype = LoginActivity.userType;
+        String token = User.token;
+        String usertype = User.userType;
         String URL ;
         if(usertype.equals("driver")) {
             URL = Connection.IP + Connection.GET_HITCHHIKER_CANDIDATE;
@@ -122,9 +145,12 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                     public void onResponse(String response) {
                         if(response.equals("false\n")){
                             //TODO:you dont have matchmaking now
+                            showNoMatch(true);
                         }
                         try {
                             jsonArray = new JSONArray(response);
+                            currentMatchCount = jsonArray.length();
+                            showNoMatch(false);
                             reload();
                          //   matchmaking();
                         } catch (JSONException e) {
@@ -169,7 +195,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("possible_match_id", match.getString("match_id"));
-            jsonObject.put("token", LoginActivity.token);
+            jsonObject.put("token", User.token);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -460,7 +486,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     System.out.print(jsonObject.toString());
                     String URL;
-                    if(LoginActivity.userType.equals("driver")){
+                    if(User.userType.equals("driver")){
                         URL = "http://35.205.45.78/get_user_image?user_image_id=" + jsonObject.getString("hitchhiker_id");
                     } else {
                         URL = "http://35.205.45.78/get_user_image?user_image_id=" + jsonObject.getString("driver_id");

@@ -20,9 +20,6 @@ public class RoleSelectionActivity extends AppCompatActivity {
     private Button hitchhiker_button;
     private Button driver_button;
 
-    private static String token;
-    private static String user_type;
-
     private FetchDriverProfileTask mDriverTask;
     private FetchHitchhikerProfileTask mHitchhikerTask;
 
@@ -38,7 +35,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
         hitchhiker_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginActivity.userType = "hitchhiker";
+                User.userType = "hitchhiker";
                 mHitchhikerTask = new FetchHitchhikerProfileTask();
                 mHitchhikerTask.execute((Void) null);
             }
@@ -46,7 +43,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
         driver_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                LoginActivity.userType = "driver";
+                User.userType = "driver";
                 mDriverTask = new FetchDriverProfileTask();
                 mDriverTask.execute((Void) null);
             }
@@ -60,9 +57,9 @@ public class RoleSelectionActivity extends AppCompatActivity {
     }
     public void readShared(){
         SharedPreferences sharedPref = this.getSharedPreferences("SHARED",Context.MODE_PRIVATE);
-        token = sharedPref.getString("token", "");
-        user_type = sharedPref.getString("type", "");
-
+        User.token = sharedPref.getString("token", "");
+        User.userType = sharedPref.getString("type", "");
+        User.user_id = sharedPref.getInt("user_id", -1);
     }
 
     public class FetchHitchhikerProfileTask extends AsyncTask<Void, Void, Boolean> {
@@ -75,7 +72,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject();
             try{
-                jsonObject.put("token", token);
+                jsonObject.put("token", User.token);
             } catch(JSONException e){
                 e.printStackTrace();
             }
@@ -128,7 +125,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
 
             JSONObject jsonObject = new JSONObject();
             try{
-                jsonObject.put("token", token);
+                jsonObject.put("token", User.token);
             } catch(JSONException e){
                 e.printStackTrace();
             }

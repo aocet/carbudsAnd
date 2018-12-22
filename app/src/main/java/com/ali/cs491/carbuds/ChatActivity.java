@@ -39,7 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private String EXCHANGE_NAME = "";
     private String message = "";
     private String name = "";
-    private int USER_ID = LoginActivity.user_id;
+    private int USER_ID = User.user_id;
     DbHelper mDbHelper;
     Handler handler = new Handler();
     String bodyOfMessage = "";

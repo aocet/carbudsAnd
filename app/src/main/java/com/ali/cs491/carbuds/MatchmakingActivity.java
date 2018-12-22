@@ -103,7 +103,7 @@ public class MatchmakingActivity extends AppCompatActivity implements CardStackL
         Connection connection = new Connection();
         System.out.println(formatter.format(date));
         try {
-            jsonObj.put("token", LoginActivity.token );
+            jsonObj.put("token", User.token );
             jsonObj.put("user_id", "2"); // get id
             jsonObj.put("trip_start_point", RouteManager.getPointString(trip.getStartPoint()));
             jsonObj.put("trip_end_point", RouteManager.getPointString(trip.getEndPoint()));

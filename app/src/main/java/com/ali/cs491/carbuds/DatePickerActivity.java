@@ -68,8 +68,8 @@ public class DatePickerActivity extends AppCompatActivity {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         System.out.println(formatter.format(calendar.getTime()));
         try {
-            jsonObj.put("token", LoginActivity.token );
-            jsonObj.put("user_id", LoginActivity.user_id); // get id
+            jsonObj.put("token", User.token );
+            jsonObj.put("user_id", User.user_id); // get id
             jsonObj.put("trip_start_point", RouteManager.getPointString(trip.getStartPoint()));
             jsonObj.put("trip_end_point", RouteManager.getPointString(trip.getEndPoint()));
             jsonObj.put("trip_start_time", formatter.format(calendar.getTime()));

@@ -136,7 +136,7 @@ public class TypeSelectionActivity extends AppCompatActivity {
         JSONObject jsonObj = new JSONObject();
         Connection connection = new Connection();
         try {
-            jsonObj.put("token", LoginActivity.token );
+            jsonObj.put("token", User.token );
             jsonObj.put("user_id",id);
             connection.setConnection(str,jsonObj);
             connection.getResponseMessage();
@@ -148,7 +148,7 @@ public class TypeSelectionActivity extends AppCompatActivity {
         JSONObject jsonObj = new JSONObject();
         Connection connection = new Connection();
         try {
-            jsonObj.put("token", LoginActivity.token );
+            jsonObj.put("token", User.token );
             jsonObj.put("user_id","2");
             connection.setConnection(Connection.SWITCH_PROFILE,jsonObj);
             connection.getResponseMessage();
@@ -160,7 +160,7 @@ public class TypeSelectionActivity extends AppCompatActivity {
         JSONObject jsonObj = new JSONObject();
         Connection connection = new Connection();
         try {
-            jsonObj.put("token", LoginActivity.token );
+            jsonObj.put("token", User.token );
             jsonObj.put("gender_preference","{Male, Female}"); // "{Male, Female}"
             jsonObj.put("music_preference", "{Electro, Pop, Rock}");
             jsonObj.put("passanger_seats","3");
@@ -179,7 +179,7 @@ public class TypeSelectionActivity extends AppCompatActivity {
         JSONObject jsonObj = new JSONObject();
         Connection connection = new Connection();
         try{
-            jsonObj.put("token", LoginActivity.token );
+            jsonObj.put("token", User.token );
             jsonObj.put("gender_preference","{Male}"); // "{Male, Female}"
             jsonObj.put("music_preference", "{Electro, Rock, Rap}");
             jsonObj.put("user_id","2");
