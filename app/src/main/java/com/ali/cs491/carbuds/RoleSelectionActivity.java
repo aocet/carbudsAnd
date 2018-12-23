@@ -36,6 +36,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 User.userType = "hitchhiker";
+                User.CheckAndRetrieveCurrentTrip();
                 mHitchhikerTask = new FetchHitchhikerProfileTask();
                 mHitchhikerTask.execute((Void) null);
             }
@@ -44,6 +45,7 @@ public class RoleSelectionActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 User.userType = "driver";
+                User.CheckAndRetrieveCurrentTrip();
                 mDriverTask = new FetchDriverProfileTask();
                 mDriverTask.execute((Void) null);
             }

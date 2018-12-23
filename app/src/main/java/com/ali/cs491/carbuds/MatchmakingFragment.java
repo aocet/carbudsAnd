@@ -1,6 +1,7 @@
 package com.ali.cs491.carbuds;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -16,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -93,6 +95,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private View noMatchView;
     private View cardsView;
     private Button noMatchButton;
+    private TextView noMatchTextView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -100,10 +103,35 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
         noMatchView =   v.findViewById(R.id.no_match);
         cardsView =  v.findViewById(R.id.matchmaking_cards);
         noMatchButton = v.findViewById(R.id.no_match_button);
+        noMatchTextView = v.findViewById(R.id.no_match_textview);
+        if(User.isTripSetted){
+            noMatchButton.setText("Reload");
+            noMatchTextView.setText("You dont have any match yet.");
+        } else {
+            noMatchButton.setText("Set Trip");
+            noMatchTextView.setText("You didn't set trip yet.");
+        }
         noMatchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(noMatchButton.getText().toString().equals("Reload")){
+                    if(!User.isTripSetted){
+                        noMatchButton.setText("Set Trip");
+                        noMatchTextView.setText("You didn't set trip yet.");
+                        Toast.makeText(getContext(), "There is no available trip, please create trip", Toast.LENGTH_SHORT).show();
+                    } else {
+                        getUser_type();
+                    }
+                } else {
+                    if(User.isTripSetted){
+                        noMatchButton.setText("Reaload");
+                        noMatchTextView.setText("You dont have any match yet.");
+                        getUser_type();
+                    } else {
+                        Intent intent = new Intent(getActivity(), StartSelectionActivity.class);
+                        startActivity(intent);
+                    }
+                }
             }
         });
         if(currentMatchCount == 0){

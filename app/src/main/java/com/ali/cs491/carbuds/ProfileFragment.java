@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -91,8 +91,6 @@ public class ProfileFragment extends Fragment {
 
     private TextView tripStartTimeView;
     private TextView tripStartTimeView2;
-    private String tripPolyline;
-    private Boolean isTrip = false;
 
     private DrawerLayout mDrawerLayout;
 
@@ -220,7 +218,7 @@ public class ProfileFragment extends Fragment {
         NavigationView navigationView = v.findViewById(R.id.nav_view);
         Menu navMenu = navigationView.getMenu();
 
-        CheckAndRetrieveCurrentTrip(navMenu);
+        CheckCurrentTrip(navMenu);
 
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -266,7 +264,7 @@ public class ProfileFragment extends Fragment {
                                 try {
                                     MapDialogFragment mapDialogFragment = new MapDialogFragment();
 
-                                    jsonObject1.put("intersection_polyline",tripPolyline);
+                                    jsonObject1.put("intersection_polyline",User.tripPolyline);
                                     mapDialogFragment.setCandidateInfo(jsonObject1);
                                     mapDialogFragment.setCancelable(true);
                                     mapDialogFragment.show(getFragmentManager(), "mapsfragment");
@@ -278,7 +276,7 @@ public class ProfileFragment extends Fragment {
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-                        //refresh();
+                        // refresh();
                         return true;
                     }
                 });
@@ -309,7 +307,6 @@ public class ProfileFragment extends Fragment {
 
             }
         });
-
         return v;
     }
     private void refresh(){
@@ -428,56 +425,22 @@ public class ProfileFragment extends Fragment {
 
     }
 
-    public void CheckAndRetrieveCurrentTrip(Menu navMenu){
-        String URL ;
-
-        URL = Connection.IP + Connection.CHECK_ACTIVE_TRIP;
-
-        JSONObject jsonObject = new JSONObject();
-        try{
-            jsonObject.put("token", User.token);
-            jsonObject.put("type", User.userType);
-        } catch(JSONException e){
-            e.printStackTrace();
+    public void CheckCurrentTrip(Menu navMenu){
+        if(User.isTripSetted == false){
+            tripStartTimeView.setVisibility(View.GONE);
+            tripStartTimeView2.setVisibility(View.GONE);
+            navMenu.findItem(R.id.cancel_trip).setVisible(false);
+            navMenu.findItem(R.id.set_trip).setVisible(true);
+            navMenu.findItem(R.id.show_trip).setVisible(false);
         }
-        AndroidNetworking.post(URL)
-                .addJSONObjectBody(jsonObject) // posting any type of file
-                .setTag("test")
-                .setPriority(Priority.MEDIUM)
-                .build()
-                .getAsString(new StringRequestListener() {
-                    @Override
-                    public void onResponse(String response) {
-                        if(response.equals("false\n")){
-                            tripStartTimeView.setVisibility(View.GONE);
-                            tripStartTimeView2.setVisibility(View.GONE);
-                            navMenu.findItem(R.id.cancel_trip).setVisible(false);
-                            navMenu.findItem(R.id.set_trip).setVisible(true);
-                            navMenu.findItem(R.id.show_trip).setVisible(false);
-                            isTrip = false;
-                        }
-                        try {
-                            JSONObject jsonObj = new JSONObject(response);
-                            tripStartTimeView.setVisibility(View.VISIBLE);
-                            tripStartTimeView2.setVisibility(View.VISIBLE);
-                            tripPolyline = jsonObj.getString("destination_polyline");
-                            String tripStartTime = jsonObj.getString("trip_start_time");
-                            tripStartTimeView2.setText(tripStartTime);
-                            isTrip = true;
-                            navMenu.findItem(R.id.cancel_trip).setVisible(true);
-                            navMenu.findItem(R.id.set_trip).setVisible(false);
-                            navMenu.findItem(R.id.show_trip).setVisible(true);
-
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    @Override
-                    public void onError(ANError error) {
-                        String str = error.getErrorBody();
-                    }
-                });
+        else{
+            tripStartTimeView.setVisibility(View.VISIBLE);
+            tripStartTimeView2.setVisibility(View.VISIBLE);
+            tripStartTimeView2.setText(User.tripStartTime);
+            navMenu.findItem(R.id.cancel_trip).setVisible(true);
+            navMenu.findItem(R.id.set_trip).setVisible(false);
+            navMenu.findItem(R.id.show_trip).setVisible(true);
+        }
     }
 
     public void CancelTrip(){
@@ -501,18 +464,14 @@ public class ProfileFragment extends Fragment {
                     @Override
                     public void onResponse(String response) {
                         if(response.equals("false\n")){
-
+                            Toast.makeText(getContext(), "Trip Cancel Failed", Toast.LENGTH_SHORT).show();
+                            return;
                         }
-                        try {
-                            JSONObject jsonObj = new JSONObject(response);
+
                             tripStartTimeView.setVisibility(View.GONE);
                             tripStartTimeView2.setVisibility(View.GONE);
-                            isTrip = false;
+                            User.isTripSetted = false;
 
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     }
                     @Override
                     public void onError(ANError error) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
 import com.androidnetworking.error.ANError;
 import com.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.androidnetworking.interfaces.StringRequestListener;
 import com.androidnetworking.interfaces.UploadProgressListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -49,6 +51,47 @@ public class MainActivity extends AppCompatActivity {
         User.token = sharedPref.getString("token", "");
         User.userType =  sharedPref.getString("type", "");
     }
+    private void CheckAndRetrieveCurrentTrip(){
+        String URL ;
+
+        URL = Connection.IP + Connection.CHECK_ACTIVE_TRIP;
+
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("token", User.token);
+            jsonObject.put("type", User.userType);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(URL)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+                            User.isTripSetted = false;
+                        }
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            User.tripPolyline = jsonObj.getString("destination_polyline");
+                            User.tripStartTime = jsonObj.getString("trip_start_time");
+                            User.isTripSetted = true;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        startActivity(new Intent(MainActivity.this,Main2Activity.class));
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        User.isTripSetted = false;
+                        startActivity(new Intent(MainActivity.this,Main2Activity.class));
+                        String str = error.getErrorBody();
+                    }
+                });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +101,14 @@ public class MainActivity extends AppCompatActivity {
             if(User.userType.equals(""))
                 startActivity(new Intent(MainActivity.this,RoleSelectionActivity.class));
             else{
-                startActivity(new Intent(MainActivity.this,Main2Activity.class));
+                CheckAndRetrieveCurrentTrip();
             }
+        } else{
+            User.isTripSetted = false;
+            User.userType = "";
+            User.username = "";
+            User.tripPolyline = "";
+            User.tripStartTime = "";
         }
         Button loginButton = findViewById(R.id.loginButton);
         Button signUpButton = findViewById(R.id.signUpButton);

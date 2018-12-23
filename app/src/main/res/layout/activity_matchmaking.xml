@@ -14,6 +14,13 @@
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/no_match_textview"
+            android:text="You dont have any match yet."
+            android:layout_above="@+id/no_match_button"
+            android:layout_centerHorizontal="true"/>
         <Button
             android:text="RELOAD"
             android:id="@+id/no_match_button"

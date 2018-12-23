@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.common.Priority;
@@ -62,6 +63,49 @@ public class DatePickerActivity extends AppCompatActivity {
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         timePicker.setText(timeFormat.format(calendar.getTime()));
     }
+    private void CheckAndRetrieveCurrentTrip(){
+        String URL ;
+
+        URL = Connection.IP + Connection.CHECK_ACTIVE_TRIP;
+
+        JSONObject jsonObject = new JSONObject();
+        try{
+            jsonObject.put("token", User.token);
+            jsonObject.put("type", User.userType);
+        } catch(JSONException e){
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(URL)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+                            User.isTripSetted = false;
+                        }
+                        try {
+                            JSONObject jsonObj = new JSONObject(response);
+                            User.tripPolyline = jsonObj.getString("destination_polyline");
+                            User.tripStartTime = jsonObj.getString("trip_start_time");
+                            User.isTripSetted = true;
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Intent intent = new Intent(DatePickerActivity.this, Main2Activity.class);
+                        startActivity(intent);
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        User.isTripSetted = false;
+                        Intent intent = new Intent(DatePickerActivity.this, Main2Activity.class);
+                        startActivity(intent);
+                        String str = error.getErrorBody();
+                    }
+                });
+    }
     public void sendRoute(){
         Trip trip = RouteManager.getTrip();
         JSONObject jsonObj = new JSONObject();
@@ -75,7 +119,7 @@ public class DatePickerActivity extends AppCompatActivity {
             jsonObj.put("trip_start_time", formatter.format(calendar.getTime()));
 
             String URL;
-            if(trip.getUserType() == RouteManager.DRIVER) {
+            if(User.userType.equals("driver")) {
                 jsonObj.put("available_seat", "2");
 
                 URL = Connection.IP + Connection.SET_TRIP_DRIVER;
@@ -90,13 +134,12 @@ public class DatePickerActivity extends AppCompatActivity {
                     .getAsString(new StringRequestListener() {
                         @Override
                         public void onResponse(String str) {
-                            Intent intent = new Intent(DatePickerActivity.this, Main2Activity.class);
-                            startActivity(intent);
+                            CheckAndRetrieveCurrentTrip();
                         }
 
                         @Override
                         public void onError(ANError anError) {
-
+                            Toast.makeText(DatePickerActivity.this, "Trip Creation Failed", Toast.LENGTH_SHORT).show();
                         }
                     });
         } catch (JSONException e) {
