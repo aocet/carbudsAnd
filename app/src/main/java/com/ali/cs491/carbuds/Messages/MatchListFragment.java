@@ -59,7 +59,15 @@ public class MatchListFragment extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
-
+    public boolean isExist(int matchId){
+        for(int i=0 ;i<users.size(); i++){
+            ChatListUser user= users.get(i);
+            if(user.getMatchId() == matchId){
+                return true;
+            }
+        }
+        return false;
+    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,10 +87,6 @@ public class MatchListFragment extends Fragment {
 
         v = this.getView();
         f = this;
-
-
-
-
     }
 
     @Override
@@ -171,10 +175,13 @@ public class MatchListFragment extends Fragment {
                 jsonarray = new JSONArray(msg);
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
+                    int matchId = jsonobject.getInt("match_id");
+                    if(isExist(matchId)){
+                        continue;
+                    }
                     String intersectionPolyline = jsonobject.getString("intersection_polyline");
                     int hitchhikerId = jsonobject.getInt("hitchhiker_id");
                     int driverId = jsonobject.getInt("driver_id");
-                    int matchId = jsonobject.getInt("match_id");
                     int id = USER_ID == driverId ? hitchhikerId : driverId;
                     String queue = (USER_ID == hitchhikerId ?
                             jsonobject.getString("hitchhiker_queue") :

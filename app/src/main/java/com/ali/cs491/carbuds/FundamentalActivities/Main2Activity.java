@@ -124,9 +124,6 @@ public class Main2Activity extends AppCompatActivity {
             }
 
         }
-        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-            String str = container.toString();
-        }
         @Override
         public int getCount() {
             // Show 3 total pages.
