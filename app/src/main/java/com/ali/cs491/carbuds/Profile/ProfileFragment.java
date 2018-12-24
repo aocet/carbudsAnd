@@ -6,6 +6,9 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -50,6 +53,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -101,7 +105,7 @@ public class ProfileFragment extends Fragment {
     private TextView tripStartTimeView2;
 
     private DrawerLayout mDrawerLayout;
-
+    private Bitmap pp;
 
     private View v;
     private Fragment f;
@@ -288,12 +292,15 @@ public class ProfileFragment extends Fragment {
 
         CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_fragment_pic);
         String loadUrl = "http://35.205.45.78/get_user_image?user_image_id=" + User.user_id;
-        Glide.with(profilePic)
-                .load(loadUrl)
-                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
-                .apply(RequestOptions.skipMemoryCacheOf(true))
-                .into(profilePic);
-
+        if(pp == null) {
+            Glide.with(profilePic)
+                    .load(loadUrl)
+                    .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                    .apply(RequestOptions.skipMemoryCacheOf(true))
+                    .into(profilePic);
+        } else {
+            profilePic.setImageBitmap(pp);
+        }
         ImageButton settingsButton = v.findViewById(R.id.settings_button);
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -318,9 +325,80 @@ public class ProfileFragment extends Fragment {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(f).attach(f).commit();
     }
-    private void compress(File file) {
-        Bitmap pp = BitmapFactory.decodeFile(file.getAbsolutePath());
+    public static Bitmap rotateImage(Bitmap source, float angle) {
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+                matrix, true);
+    }
+    private void compressAndRotate(File file) {
+        BitmapFactory.Options options;
+        Bitmap bitmap = null;
+        try {
+            bitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
+        } catch (OutOfMemoryError e) {
+            try {
+                options = new BitmapFactory.Options();
+                options.inSampleSize = 2;
+                FileInputStream fileInputStream = new FileInputStream(file);
+                bitmap = BitmapFactory.decodeStream(fileInputStream, null, options);
+            } catch(Exception excepetion) {
+
+            }
+        } catch (Exception e){
+            String str = e.getMessage();
+        }
+        if(bitmap == null){
+            Toast.makeText(getContext(), "Image Selection Failed, Size of image too big", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+
+
         OutputStream os = null;
+        ExifInterface ei = null;
+        try {
+            ei = new ExifInterface(file.getAbsolutePath());
+
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
+
+            switch(orientation) {
+
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    pp = rotateImage(bitmap, 90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    pp = rotateImage(bitmap, 180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    pp = rotateImage(bitmap, 270);
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                    pp = bitmap;
+                    break;
+                    default:
+                        pp = bitmap;
+                        break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            pp = bitmap;
+        }
+      /*  File uploadFile =getActivity().getCacheDir();
+        try {
+            uploadFile = File.createTempFile("uploadImage", ".jpeg", uploadFile);
+            uploadFile.createNewFile(); // if file already exists will do nothing
+            FileOutputStream oFile = new FileOutputStream(uploadFile, false);
+            os = new BufferedOutputStream(oFile);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/  // it is for creating new
         try {
             os = new BufferedOutputStream(new FileOutputStream(file));
         } catch (FileNotFoundException e) {
@@ -332,6 +410,10 @@ public class ProfileFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(file == null){
+            return;
+        }
+        uploadImage(file);
     }
 
     private void uploadImage(File file){
@@ -353,7 +435,6 @@ public class ProfileFragment extends Fragment {
                     public void onResponse(String response) {
                         if(response.equals("true\n")) {
                             CircleImageView profilePic = (CircleImageView)v.findViewById(R.id.profile_fragment_pic);
-                            Bitmap pp = BitmapFactory.decodeFile(file.getAbsolutePath());
                             if(pp != null){
                                 profilePic.setImageBitmap(pp);
                                 refresh();
@@ -387,14 +468,11 @@ public class ProfileFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, final int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+        if (requestCode == 111 && resultCode != ReturnMode.NONE.ordinal()) {
             images = (ArrayList<Image>) ImagePicker.getImages(data);
             File imgFile = new File(images.get(0).getPath());
             if(imgFile.exists()){
-                compress(imgFile);
-                uploadImage(imgFile);
-                refresh();
+                compressAndRotate(imgFile);
             }
             return;
         }
