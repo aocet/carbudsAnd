@@ -22,7 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity">
+        <activity android:name=".FundamentalActivities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,21 +30,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".FundamentalActivities.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".FundamentalActivities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ali.cs491.carbuds.MainActivity" />
+                android:value="com.ali.cs491.carbuds.FundamentalActivities.MainActivity" />
         </activity>
-        <activity android:name=".TypeSelectionActivity"
-            android:screenOrientation="portrait"
-        ></activity>
-        <activity
-            android:name=".SettingsActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_settings" />
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -58,57 +52,53 @@
             android:value="AIzaSyBhWJgRmMZum5qBnjGA7HoaY_vpmyzMxe0" />
 
         <activity
-            android:name=".StartSelectionActivity"
+            android:name=".SetTrip.StartSelectionActivity"
             android:screenOrientation="portrait"
             android:label="@string/title_activity_selection" />
         <activity
-            android:name=".MatchmakingActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".RegisterActivity"
+            android:name=".FundamentalActivities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName=".FundamentalActivities.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ali.cs491.carbuds.MainActivity" />
+                android:value="com.ali.cs491.carbuds.FundamentalActivities.MainActivity" />
         </activity>
         <activity
-            android:name=".DatePickerActivity"
+            android:name=".SetTrip.DatePickerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             ></activity>
         <activity
-            android:name=".MatchListActivity"
+            android:name=".Messages.MatchListActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".ChatActivity"
+            android:name=".Messages.ChatActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".InfoMatchActivity"
+            android:name=".Messages.InfoMatchActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".InitialHitchhikerProfileActivity"
+            android:name=".Profile.InitialHitchhikerProfileActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".InitialDriverProfileActivity"
+            android:name=".Profile.InitialDriverProfileActivity"
             android:screenOrientation="portrait"></activity>>
         <activity
-            android:name=".RoleSelectionActivity"
+            android:name=".FundamentalActivities.RoleSelectionActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:name=".DriverProfilePageActivity"
+            android:name=".Profile.DriverProfilePageActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Main2Activity"
+            android:name=".FundamentalActivities.Main2Activity"
             android:label="@string/title_activity_main2"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
 
-        <service android:name=".MyFirebaseMessagingService">
+        <service android:name=".Notification.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

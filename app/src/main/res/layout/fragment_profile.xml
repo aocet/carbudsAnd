@@ -5,7 +5,7 @@
     android:id="@+id/profile_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ali.cs491.carbuds.ProfileFragment">
+    tools:context="com.ali.cs491.carbuds.Profile.ProfileFragment">
 
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/trip_background"
-    tools:context="com.ali.cs491.carbuds.DatePickerActivity">
+    tools:context="com.ali.cs491.carbuds.SetTrip.DatePickerActivity">
 
     <TextView
         android:id="@+id/dateTextView"

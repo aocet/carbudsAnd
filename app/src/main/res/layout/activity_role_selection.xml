@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.ali.cs491.carbuds.RoleSelectionActivity">
+    tools:context="com.ali.cs491.carbuds.FundamentalActivities.RoleSelectionActivity">
 
     <Button
         android:id="@+id/hitchhiker_button"
