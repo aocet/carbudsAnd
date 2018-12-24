@@ -103,10 +103,7 @@ public class ProfileFragment extends Fragment {
     private DrawerLayout mDrawerLayout;
 
 
-    private View formView;
-    private View progressView;
     private View v;
-    private Bitmap pp;
     private Fragment f;
 
     @Override
@@ -391,7 +388,7 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, final int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 111) {
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
             images = (ArrayList<Image>) ImagePicker.getImages(data);
             File imgFile = new File(images.get(0).getPath());
             if(imgFile.exists()){
