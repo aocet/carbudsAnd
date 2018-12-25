@@ -5,12 +5,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.ali.cs491.carbuds.Messages.MatchListFragment">
-
+    <RelativeLayout
+        android:orientation="vertical"
+        android:id="@+id/empty_matchlist"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/empty_matchlist_textview"
+            android:text="You dont have any match yet."
+            android:layout_above="@+id/empty_matchlist_button"
+            android:layout_centerHorizontal="true"/>
+        <Button
+            android:text="RELOAD"
+            android:id="@+id/empty_matchlist_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+    </RelativeLayout>
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/full_matchlist_view"
         tools:context=".ChatList" >
 
         <ListView
