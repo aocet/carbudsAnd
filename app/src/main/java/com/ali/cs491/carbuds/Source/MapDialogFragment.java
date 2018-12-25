@@ -11,12 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ali.cs491.carbuds.R;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -83,7 +85,16 @@ public class MapDialogFragment extends DialogFragment
         for (int i = 0; i < polylines.size(); i++) {
             polyOptions.add(polylines.get(i));
         }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(polylines.get(polylines.size()-1), 15));
+
+        LatLngBounds.Builder builder = new LatLngBounds.Builder();
+
+//the include method will calculate the min and max bound.
+
+
+
+
+
+        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(polylines.get(polylines.size()-1), 15));
         polyOptions.color(Color.BLUE);
         polyOptions.width(15);
         Polyline line = googleMap.addPolyline(polyOptions);
@@ -93,12 +104,23 @@ public class MapDialogFragment extends DialogFragment
         markerOptions.title("Start Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
         mMap.addMarker(markerOptions);
+        builder.include(markerOptions.getPosition());
 
         markerOptions = new MarkerOptions();
         markerOptions.position(polylines.get(polylines.size()-1));
         markerOptions.title("End Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
         mMap.addMarker(markerOptions);
+        builder.include(markerOptions.getPosition());
+
+        LatLngBounds bounds = builder.build();
+
+        int width = getActivity().getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        int padding = (int) (width * 0.25); // offset from edges of the map 10% of screen
+
+        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 1050, 1500, padding);
+        mMap.moveCamera(cu);
     }
 
     @Override
