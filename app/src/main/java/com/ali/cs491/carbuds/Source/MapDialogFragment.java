@@ -62,6 +62,7 @@ public class MapDialogFragment extends DialogFragment
         int dialogHeight = 1500; // specify a value here
 
         getDialog().getWindow().setLayout(dialogWidth, dialogHeight);
+        getDialog().getWindow().setBackgroundDrawableResource(R.drawable.layout_border);
     }
 
     @Override
