@@ -73,9 +73,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             ></activity>
         <activity
-            android:name=".Messages.MatchListActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity
             android:name=".Messages.ChatActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />

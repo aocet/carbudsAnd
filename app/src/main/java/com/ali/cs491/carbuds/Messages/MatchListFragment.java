@@ -14,8 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.ali.cs491.carbuds.SetTrip.StartSelectionActivity;
 import com.ali.cs491.carbuds.Source.Connection;
 import com.ali.cs491.carbuds.R;
 import com.ali.cs491.carbuds.Source.User;
@@ -40,6 +44,10 @@ public class MatchListFragment extends Fragment {
 
     List<ChatListUser> users = new ArrayList<ChatListUser>();
     MatchListAdapter mMessageListAdapter;
+    private View emptyView;
+    private View fullView;
+    private Button noMatchButton;
+    private TextView noMatchTextView;
     private Fragment f;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -73,12 +81,50 @@ public class MatchListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
+    private void showNoMatch(boolean show){
+        emptyView.setVisibility(show ? View.VISIBLE: View.GONE);
+        fullView.setVisibility(show? View.GONE:View.VISIBLE);
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_match_list, container, false);
-
+        emptyView = rootView.findViewById(R.id.empty_matchlist);
+        fullView = rootView.findViewById(R.id.full_matchlist_view);
+        noMatchButton = rootView.findViewById(R.id.empty_matchlist_button);
+        noMatchTextView = rootView.findViewById(R.id.empty_matchlist_textview);
+        if(User.isTripSetted){
+            noMatchButton.setText("Reload");
+            noMatchTextView.setText("You dont have any match yet.");
+        } else {
+            noMatchButton.setText("Set Trip");
+            noMatchTextView.setText("You didn't set trip yet.");
+        }
+        noMatchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(noMatchButton.getText().toString().equals("Reload")){
+                    if(!User.isTripSetted){
+                        noMatchButton.setText("Set Trip");
+                        noMatchTextView.setText("You didn't set trip yet.");
+                        Toast.makeText(getContext(), "There is no available trip, please create trip", Toast.LENGTH_SHORT).show();
+                    } else {
+                        mMatchTask = new MatchListTask();
+                        mMatchTask.execute((Void) null);
+                    }
+                } else {
+                    if(User.isTripSetted){
+                        noMatchButton.setText("Reaload");
+                        noMatchTextView.setText("You dont have any match yet.");
+                        mMatchTask = new MatchListTask();
+                        mMatchTask.execute((Void) null);
+                    } else {
+                        Intent intent = new Intent(getActivity(), StartSelectionActivity.class);
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
         return rootView;
     }
     @Override
@@ -215,7 +261,11 @@ public class MatchListFragment extends Fragment {
         @Override
         protected void onPostExecute(final Boolean success) {
             mMatchTask = null;
-
+            if(users.isEmpty()){
+                showNoMatch(true);
+            } else {
+                showNoMatch(false);
+            }
             if (success) {
 
                 mMessageListAdapter.notifyDataSetInvalidated();
