@@ -74,6 +74,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     private TextView userNameView;
     private TextView currentRoleView;
     private JSONArray jsonArray;
+    private int counter;
     public int currentMatchCount;
     private  int user_id;
     public  String token;
@@ -178,6 +179,7 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                         try {
                             jsonArray = new JSONArray(response);
                             currentMatchCount = jsonArray.length();
+                            counter = 0;
                             showNoMatch(false);
                             reload();
                          //   matchmaking();
@@ -238,13 +240,46 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
                         if(response.equals("false\n")){
                             //TODO:you dont have matchmaking now
                         }
-                        try {
-                            jsonArray = new JSONArray(response);
-                            reload();
-                            //   matchmaking();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        if(response.equals("Database Error\n")){
+                            Toast.makeText(getContext(), "Database error", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                    @Override
+                    public void onError(ANError error) {
+                        String str = error.getErrorBody();
+                    }
+                });
+    }
+    private void dislike(){
+        int index = manager.getTopPosition()-1;
+        JSONObject match = null;
+        try {
+            match = jsonArray.getJSONObject(index);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("possible_match_id", match.getString("match_id"));
+            jsonObject.put("token", User.token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        AndroidNetworking.post(Connection.IP + Connection.DISLIKE_MATCH)
+                .addJSONObjectBody(jsonObject) // posting any type of file
+                .setTag("test")
+                .setPriority(Priority.MEDIUM)
+                .build()
+                .getAsString(new StringRequestListener() {
+                    @Override
+                    public void onResponse(String response) {
+                        if(response.equals("false\n")){
+                            //TODO:you dont have matchmaking now
+                        }
+                        if(response.equals("Database Error\n")){
+                            Toast.makeText(getContext(), "Database error", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                     @Override
                     public void onError(ANError error) {
@@ -260,9 +295,12 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
             like();
 
         } else if(direction.equals(Direction.Left)){
-            //begenmezse bir sey almayacak
-            //token
-            //match_id
+            dislike();
+        }
+        counter++;
+        if(counter == jsonArray.length()){
+            Toast.makeText(getContext(), "No more candidate", Toast.LENGTH_SHORT).show();
+            showNoMatch(true);
         }
         if (manager.getTopPosition() == adapter.getItemCount() - 5) {
             paginate();
@@ -289,58 +327,6 @@ public class MatchmakingFragment extends Fragment implements CardStackListener {
     public void onCardDisappeared(View view, int position) {
 
     }
-
-
-    /*private void setupNavigation(View v) {
-        // Toolbar
-        Toolbar toolbar = v.findViewById(R.id.toolbar);
-        ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
-
-        // DrawerLayout
-        drawerLayout = v.findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle actionBarDrawerToggle = new ActionBarDrawerToggle(getActivity(), drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
-        actionBarDrawerToggle.syncState();
-        drawerLayout.addDrawerListener(actionBarDrawerToggle);
-
-        // NavigationView
-        NavigationView navigationView = v.findViewById(R.id.navigation_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.home:
-                        reload();
-                        break;
-                    case R.id.matches:
-                        addFirst(1);
-                        break;
-                    case R.id.find_buddy:
-                        addFirst(2);
-                        break;
-                    case R.id.set_trip_as_driver:
-                        addLast(1);
-                        break;
-                    case R.id.set_trip_as_hitchhiker:
-                        addLast(2);
-                        break;
-                    case R.id.update_driver_profile:
-                        removeFirst(1);
-                        break;
-                    case R.id.update_hitchhiker_profile:
-                        removeFirst(2);
-                        break;
-                    case R.id.settings:
-                        removeLast(1);
-                        break;
-                    case R.id.logout:
-                        removeLast(2);
-                        break;
-                }
-                drawerLayout.closeDrawers();
-                return true;
-            }
-        });
-    }*/
 
     private void setupCardStackView(View v) {
         initialize(v);
