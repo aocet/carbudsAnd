@@ -24,7 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FundamentalActivities.MainActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,10 +35,10 @@
             android:name=".FundamentalActivities.LoginActivity"
             android:label="@string/title_activity_login"
             android:screenOrientation="portrait"
-            android:parentActivityName=".FundamentalActivities.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ali.cs491.carbuds.FundamentalActivities.MainActivity" />
+                android:value="com.ali.cs491.carbuds.MainActivity" />
         </activity>
 
         <!--
@@ -61,10 +61,10 @@
             android:name=".FundamentalActivities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait"
-            android:parentActivityName=".FundamentalActivities.MainActivity">
+            android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.ali.cs491.carbuds.FundamentalActivities.MainActivity" />
+                android:value="com.ali.cs491.carbuds.MainActivity" />
         </activity>
         <activity
             android:name=".SetTrip.DatePickerActivity"

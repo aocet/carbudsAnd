@@ -29,7 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ali.cs491.carbuds.Source.Connection;
-import com.ali.cs491.carbuds.FundamentalActivities.MainActivity;
+import com.ali.cs491.carbuds.MainActivity;
 import com.ali.cs491.carbuds.Source.MapDialogFragment;
 import com.ali.cs491.carbuds.R;
 import com.ali.cs491.carbuds.FundamentalActivities.RoleSelectionActivity;

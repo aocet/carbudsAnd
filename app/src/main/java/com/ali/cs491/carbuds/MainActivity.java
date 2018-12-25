@@ -1,4 +1,4 @@
-package com.ali.cs491.carbuds.FundamentalActivities;
+package com.ali.cs491.carbuds;
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,10 @@ import android.widget.TextView;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.ali.cs491.carbuds.R;
+import com.ali.cs491.carbuds.FundamentalActivities.LoginActivity;
+import com.ali.cs491.carbuds.FundamentalActivities.Main2Activity;
+import com.ali.cs491.carbuds.FundamentalActivities.RegisterActivity;
+import com.ali.cs491.carbuds.FundamentalActivities.RoleSelectionActivity;
 import com.ali.cs491.carbuds.Source.Connection;
 import com.ali.cs491.carbuds.Source.User;
 import com.androidnetworking.AndroidNetworking;
