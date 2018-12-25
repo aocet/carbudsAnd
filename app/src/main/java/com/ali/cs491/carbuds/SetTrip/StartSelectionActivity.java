@@ -4,19 +4,22 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.ali.cs491.carbuds.R;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -35,44 +38,20 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
     private Marker startMarker;
     private Marker endMarker;
     private FusedLocationProviderClient mFusedLocationClient;
+    PlaceAutocompleteFragment placeAutoComplete;
     private boolean First = false;
-    private Button searchButton;
+    private Button doneOrNextButton;
     private EditText searchBar;
     private double home_long,home_lat;
     private LatLng latLng;
     private String addressText,addMarker;
     private MarkerOptions markerOptions;
-    protected void search(List<Address> addresses) {
 
-        Address address = (Address) addresses.get(0);
-        home_long = address.getLongitude();
-        home_lat = address.getLatitude();
-        latLng = new LatLng(address.getLatitude(), address.getLongitude());
-
-        addressText = String.format(
-                "%s, %s",
-                address.getMaxAddressLineIndex() > 0 ? address
-                        .getAddressLine(0) : "", address.getCountryName());
-
-        markerOptions = new MarkerOptions();
-
-        markerOptions.position(latLng);
-        markerOptions.title(addressText);
-
-        //mMap.clear();
-        mMap.addMarker(markerOptions);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-        //locationTv.setText("Latitude:" + address.getLatitude() + ", Longitude:"
-          //      + address.getLongitude());
-
-
-    }
     public void firstDone() {
         First = true;
         endMarker.setVisible(true);
       //  searchBar.setText("Select End Point");
-        searchButton.setText("Done");
+        doneOrNextButton.setText("Done");
     }
 
     public boolean isFirstDone() {
@@ -84,17 +63,35 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selection);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+   //     searchBar = findViewById(R.id.searchBar);
+   //     searchBar.setCursorVisible(true);
+        placeAutoComplete = (PlaceAutocompleteFragment) getFragmentManager().findFragmentById(R.id.place_autocomplete);
+        placeAutoComplete.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(place.getLatLng()));
+                if(First){
+                    endMarker.setPosition(place.getLatLng());
+                } else {
+                    startMarker.setPosition(place.getLatLng());
+                }
+                Log.d("Maps", "Place selected: " + place.getName());
+            }
+
+            @Override
+            public void onError(Status status) {
+                Log.d("Maps", "An error occurred: " + status);
+            }
+        });
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        searchBar = findViewById(R.id.searchBar);
-        searchBar.setCursorVisible(true);
-      
-        searchButton = findViewById(R.id.searchButton);
+        doneOrNextButton = findViewById(R.id.searchButton);
 
 
-        searchButton.setText("Next");
-        searchBar.setOnKeyListener(new View.OnKeyListener() {
+        doneOrNextButton.setText("Next");
+     /*   searchBar.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 // If the event is a key-down event on the "enter" button
@@ -119,8 +116,8 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
                 }
                 return false;
             }
-        });
-        searchButton.setOnClickListener(new View.OnClickListener() {
+        });*/
+        doneOrNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -137,7 +134,17 @@ public class StartSelectionActivity extends FragmentActivity implements OnMapRea
 
 
     }
-
+    @Override
+    public void onBackPressed(){
+        if(First){
+            First = false;
+            endMarker.setVisible(false);
+            //  searchBar.setText("Select End Point");
+            doneOrNextButton.setText("Next");
+        } else{
+            super.onBackPressed();
+        }
+    }
 
     /**
      * Manipulates the map once available.

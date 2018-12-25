@@ -83,7 +83,7 @@ public class MapDialogFragment extends DialogFragment
         for (int i = 0; i < polylines.size(); i++) {
             polyOptions.add(polylines.get(i));
         }
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(polylines.get(0), 15));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(polylines.get(polylines.size()-1), 15));
         polyOptions.color(Color.BLUE);
         polyOptions.width(15);
         Polyline line = googleMap.addPolyline(polyOptions);
