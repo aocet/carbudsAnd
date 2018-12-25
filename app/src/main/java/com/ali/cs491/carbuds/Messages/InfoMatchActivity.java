@@ -6,8 +6,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
+import com.ali.cs491.carbuds.FundamentalActivities.Main2Activity;
+import com.ali.cs491.carbuds.FundamentalActivities.RegisterActivity;
 import com.ali.cs491.carbuds.Source.Connection;
 import com.ali.cs491.carbuds.Source.MapDialogFragment;
 import com.ali.cs491.carbuds.R;
@@ -39,6 +42,7 @@ public class InfoMatchActivity extends FragmentActivity {
 
         Intent intent = getIntent();
         int id = intent.getIntExtra("user_id", -1);
+        int match_id = intent.getIntExtra("match_id", -1);
         String name = intent.getStringExtra("name");
         String surname = intent.getStringExtra("surname");
         String exchange = intent.getStringExtra("exchange");
@@ -92,6 +96,8 @@ public class InfoMatchActivity extends FragmentActivity {
         TextView tripView = (TextView) findViewById(R.id.tripTime);
         tripView.setText("Trip Start Time: " + tripStartTime);
 
+        Button cancelButton = (Button) findViewById(R.id.cancelMatch);
+
         CircleImageView profilePic = (CircleImageView)findViewById(R.id.profilePicture);
         Glide.with(profilePic)
                 .load("http://35.205.45.78/get_user_image?user_image_id="+id)
@@ -101,46 +107,48 @@ public class InfoMatchActivity extends FragmentActivity {
         profilePic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*ImagePopup imagePopup = new ImagePopup(InfoMatchActivity.this);
-                imagePopup.setBackgroundColor(Color.BLACK);
-                imagePopup.setImageOnClickClose(true);
-                ImageView imageView = new ImageView(InfoMatchActivity.this);
-                imagePopup.initiatePopup(imageView.getDrawable());
-                imagePopup.initiatePopupWithGlide("http://35.205.45.78/get_user_image?user_image_id="+id);
-                imagePopup.viewPopup();*/
+
             }
         });
-        /*MapView mapView = (MapView) findViewById(R.id.map);
 
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(new OnMapReadyCallback() {
-
+        cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onMapReady(GoogleMap googleMap) {
-
-                String startLocation = startPoint.substring(1, startPoint.length()-1);
-                String endLocation = endPoint.substring(1, endPoint.length()-1);
-                startLocation = startLocation.replace(" ", "");
-                endLocation = endLocation.replace(" ", "");
-
-                String[] startLocations = startLocation.split(",");
-                String[] endLocations = endLocation.split(",");
-
-                Double[] startPoints = {Double.valueOf(startLocations[0]), Double.valueOf(startLocations[1])};
-                Double[] endPoints = {Double.valueOf(endLocations[0]), Double.valueOf(endLocations[1])};
-                LatLng coordinates = new LatLng(startPoints[0], startPoints[1]);
-
-                List<LatLng> polylines = PolyUtil.decode(intersectionPolyline);
-                PolylineOptions polyOptions = new PolylineOptions();
-
-                for (int i = 0; i < polylines.size(); i++) {
-                    polyOptions.add(polylines.get(i));
+            public void onClick(View view) {
+                if (id == -1 || match_id == -1) {
+                    return;
                 }
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
-                Polyline line = googleMap.addPolyline(polyOptions.geodesic(true));
-                mapView.onResume();
+                JSONObject jsonObject = new JSONObject();
+                try{
+                    jsonObject.put("token", User.token);
+                    jsonObject.put("user_id", id);
+                    jsonObject.put("match_id", match_id);
+                } catch(JSONException e){
+                    e.printStackTrace();
+                }
+
+                AndroidNetworking.post(Connection.IP + Connection.REMOVE_MATCH )
+                        .addJSONObjectBody(jsonObject) // posting any type of file
+                        .setTag("test")
+                        .setPriority(Priority.MEDIUM)
+                        .build()
+                        .getAsString(new StringRequestListener() {
+                            @Override
+                            public void onResponse(String str) {
+                                if (str.equals("false\n")) {
+                                    Toast.makeText(InfoMatchActivity.this, "Trip Cancel Failed", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Intent intent = new Intent(InfoMatchActivity.this, Main2Activity.class);
+                                    startActivity(intent);
+                                }
+                            }
+
+                            @Override
+                            public void onError(ANError anError) {
+                                System.out.println("Error on canceling trip");
+                            }
+                        });
             }
-        });*/
+        });
         Button openMap = findViewById(R.id.openMapsButton);
         openMap.setOnClickListener(new View.OnClickListener() {
             @Override

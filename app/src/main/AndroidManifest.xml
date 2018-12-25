@@ -61,6 +61,7 @@
             android:name=".FundamentalActivities.RegisterActivity"
             android:label="@string/title_activity_register"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

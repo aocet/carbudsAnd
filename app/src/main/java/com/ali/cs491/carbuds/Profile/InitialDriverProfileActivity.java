@@ -83,7 +83,7 @@ public class InitialDriverProfileActivity extends AppCompatActivity {
         progressView = findViewById(R.id.initial_driver_progress);
 
         musicPreferenceSpinner = findViewById(R.id.music_preference_spinner);
-        String[] musicGenres = new String[] {"Pop", "Rock", "Rap"};
+        String[] musicGenres = new String[] {"Pop", "Rock", "Rap", "Electro"};
         musicPreferenceSpinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, musicGenres));
 
         Button mEmailSignInButton = (Button) findViewById(R.id.button);

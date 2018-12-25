@@ -44,6 +44,7 @@ public class Connection {
     public static final String DISLIKE_MATCH = "dislike_match";
     public static final String CHECK_ACTIVE_TRIP = "check_active_trip";
     public static final String CANCEL_TRIP = "cancel_trip";
+    public static final String REMOVE_MATCH = "remove_match";
 
     private String msg;
     public Connection(){

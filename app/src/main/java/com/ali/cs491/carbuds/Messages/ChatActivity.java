@@ -182,7 +182,7 @@ public class ChatActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), InfoMatchActivity.class);
                 intent.putExtra("user_id", id);
-                intent.putExtra("matchId", match_id);
+                intent.putExtra("match_id", match_id);
                 intent.putExtra("name", name);
                 intent.putExtra("exchange", exchange);
                 intent.putExtra("surname", surName);

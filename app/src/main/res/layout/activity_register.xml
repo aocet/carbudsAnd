@@ -34,24 +34,30 @@
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="#979797"
+                android:textColor="#FFFFFF">
 
                 <EditText
                     android:id="@+id/name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:ems="10"
                     android:hint="@string/prompt_name"
                     android:inputType="textPersonName"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="20sp"
-                    android:ems="10"/>
+                    android:textColorHint="#979797"
+                    android:textColor="#FFFFFF"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="#979797"
+                android:textColor="#FFFFFF">
 
                 <EditText
                     android:id="@+id/surname"
@@ -62,13 +68,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="20sp"
+                    android:textColorHint="#979797"
+                    android:textColor="#FFFFFF"
                     android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="#979797"
+                android:textColor="#FFFFFF">
 
                 <EditText
                     android:id="@+id/username"
@@ -79,13 +89,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="20sp"
+                    android:textColorHint="#979797"
+                    android:textColor="#FFFFFF"
                     android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="#979797"
+                android:textColor="#FFFFFF">
 
                 <EditText
                     android:id="@+id/email"
@@ -96,13 +110,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="20sp"
+                    android:textColorHint="#979797"
+                    android:textColor="#FFFFFF"
                     android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="#979797"
+                android:textColor="#FFFFFF">
 
                 <EditText
                     android:id="@+id/password"
@@ -116,13 +134,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="20sp"
+                    android:textColorHint="#979797"
+                    android:textColor="#FFFFFF"
                     android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:textColorHint="#979797"
+                android:textColor="#FFFFFF">
 
                 <EditText
                     android:id="@+id/passwordRe"
@@ -136,14 +158,19 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textSize="20sp"
+                    android:textColorHint="#979797"
+                    android:textColor="#FFFFFF"
                     android:ems="10"/>
 
             </android.support.design.widget.TextInputLayout>
+
             <Spinner
                 android:id="@+id/gender"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="@string/prompt_gender"/>
+                android:hint="@string/prompt_gender"
+                android:background="#979797"
+                android:popupBackground="#FFFFFF" />
             <Button
                 android:id="@+id/register_button"
                 style="?android:textAppearanceSmall"

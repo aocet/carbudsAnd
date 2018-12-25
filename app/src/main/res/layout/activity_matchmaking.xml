@@ -94,10 +94,10 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:hapticFeedbackEnabled="true"
-                        android:src="@drawable/rewind_blue_24dp"
+                        android:src="@drawable/maps_icon"
                         app:backgroundTint="@android:color/white"
                         app:fabSize="mini"
-                        app:rippleColor="#225BC9FA"/>
+                        app:rippleColor="#225BC9FA" />
 
                 </RelativeLayout>
 

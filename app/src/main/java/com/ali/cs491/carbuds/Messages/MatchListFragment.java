@@ -196,7 +196,7 @@ public class MatchListFragment extends Fragment {
                     String tripStartTime = jsonobject.getString("trip_start_time");
                     String startPoint = jsonobject.getString("start_point");
                     String endPoint = jsonobject.getString("end_point");
-                    boolean isDriver = (USER_ID == driverId);
+                    boolean isDriver = (USER_ID != driverId);
                     users.add(new ChatListUser(id, matchId, name, lastName,
                             exchange, queue, intersectionPolyline, tripStartTime,
                             startPoint, endPoint, isDriver));
