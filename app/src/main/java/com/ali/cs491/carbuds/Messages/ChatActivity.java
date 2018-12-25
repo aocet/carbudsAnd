@@ -92,7 +92,14 @@ public class ChatActivity extends AppCompatActivity {
         Boolean isDriver = intent.getBooleanExtra("isDriver", false);
 
         TextView chatUserName = (TextView) findViewById(R.id.chatUserName);
-        chatUserName.setText(name + " " + surName);
+        if (name.length() > 0) {
+
+            String firstLetter = name.substring(0, 1).toUpperCase();
+            String restLetters = name.substring(1, name.length());
+            String label = firstLetter+restLetters;
+            chatUserName.setText(label);
+        }
+
 
 
         CircleImageView profilePic = (CircleImageView)findViewById(R.id.chatPicture);
