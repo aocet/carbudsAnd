@@ -22,6 +22,9 @@ import android.widget.TextView;
 import com.ali.cs491.carbuds.Messages.Message;
 import com.ali.cs491.carbuds.R;
 import com.ali.cs491.carbuds.Source.User;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.rabbitmq.client.CancelCallback;
 import com.rabbitmq.client.DeliverCallback;
 import com.rabbitmq.client.Delivery;
@@ -33,6 +36,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
     private TextView mOutput;
@@ -64,7 +69,15 @@ public class ChatActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        Toolbar topToolBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topToolBar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowTitleEnabled(false);
+
         Intent intent = getIntent();
+
 
         int id = intent.getIntExtra("user_id", -1);
         int match_id = intent.getIntExtra("matchId", -1);
@@ -77,6 +90,17 @@ public class ChatActivity extends AppCompatActivity {
         String startPoint = intent.getStringExtra("startPoint");
         String endPoint = intent.getStringExtra("endPoint");
         Boolean isDriver = intent.getBooleanExtra("isDriver", false);
+
+        TextView chatUserName = (TextView) findViewById(R.id.chatUserName);
+        chatUserName.setText(name + " " + surName);
+
+
+        CircleImageView profilePic = (CircleImageView)findViewById(R.id.chatPicture);
+        Glide.with(profilePic)
+                .load("http://35.205.45.78/get_user_image?user_image_id="+id)
+                .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
+                .apply(RequestOptions.skipMemoryCacheOf(true))
+                .into(profilePic);
 
         EXCHANGE_NAME = exchange;
         QUEUE_NAME = queue;
@@ -170,11 +194,7 @@ public class ChatActivity extends AppCompatActivity {
 
         startTimerThread();
 
-        Toolbar topToolBar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(topToolBar);
-        ActionBar actionBar = getSupportActionBar();
-        ;
-        actionBar.setDisplayHomeAsUpEnabled(true);
+
 
         Button b = (Button) findViewById(R.id.info_button);
         b.setOnClickListener(new View.OnClickListener() {

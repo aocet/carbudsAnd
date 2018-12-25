@@ -18,13 +18,42 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="left"
+            android:background="#00aaaaaa">
+
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+
+                android:id="@+id/chatPicture"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:clickable="true"
+                android:scaleType="centerCrop"
+                app:civ_border_color="#FFFFFFFF"
+                app:civ_border_width="3dp" />
+
+            <TextView
+                android:id="@+id/chatUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_marginTop="7dp"
+                android:layout_marginLeft="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="#00aaaaaa">
 
             <Button
                 android:id="@+id/info_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
                 android:background="@drawable/ic_action_name" />
 
         </LinearLayout>
