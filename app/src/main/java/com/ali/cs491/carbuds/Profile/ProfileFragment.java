@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment {
     private TextView tripStartTimeView2;
 
     private DrawerLayout mDrawerLayout;
-    private Bitmap pp;
+    public static Bitmap pp;
 
     private View v;
     private Fragment f;
