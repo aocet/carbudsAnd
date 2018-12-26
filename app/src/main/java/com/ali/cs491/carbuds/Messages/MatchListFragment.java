@@ -71,6 +71,7 @@ public class MatchListFragment extends Fragment {
         for(int i=0 ;i<users.size(); i++){
             ChatListUser user= users.get(i);
             if(user.getMatchId() == matchId){
+
                 return true;
             }
         }
@@ -190,7 +191,16 @@ public class MatchListFragment extends Fragment {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(f).attach(f).commit();
     }
-
+    private void deleteUsers(ArrayList<Integer> prev){
+        for(int i=0; i <users.size();i++){
+            ChatListUser user= users.get(i);
+            int a= prev.indexOf(user.getMatchId());
+            if( a!= -1){
+                users.remove(a);
+                i--;
+            }
+        }
+    }
     public class MatchListTask extends AsyncTask<Void, Void, Boolean> {
 
         private final int userId;
@@ -218,11 +228,18 @@ public class MatchListFragment extends Fragment {
             Log.i("Carbuds",msg);
             try {
                 //users = new ArrayList<ChatListUser>();
+                ArrayList<Integer> previousMatches = new ArrayList<Integer>();
+                if(users != null){
+                    for(int i=0;i<users.size();i++){
+                        previousMatches.add(users.get(i).getMatchId());
+                    }
+                }
                 jsonarray = new JSONArray(msg);
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
                     int matchId = jsonobject.getInt("match_id");
                     if(isExist(matchId)){
+                        previousMatches.remove(matchId);
                         continue;
                     }
                     String intersectionPolyline = jsonobject.getString("intersection_polyline");
@@ -246,6 +263,9 @@ public class MatchListFragment extends Fragment {
                     users.add(new ChatListUser(id, matchId, name, lastName,
                             exchange, queue, intersectionPolyline, tripStartTime,
                             startPoint, endPoint, isDriver));
+                }
+                if(previousMatches.isEmpty() == false){
+                    deleteUsers(previousMatches);
                 }
 
             } catch (JSONException e) {
