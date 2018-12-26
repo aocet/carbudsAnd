@@ -140,7 +140,8 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
                 bitmap = BitmapFactory.decodeStream(fileInputStream, null, options);
             } catch(Exception excepetion) {
 
-            }
+            }        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+
         } catch (Exception e){
             String str = e.getMessage();
         }
@@ -148,7 +149,9 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Image Selection Failed, Size of image too big", Toast.LENGTH_SHORT).show();
             return;
         }
-        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+        int scale = bitmap.getWidth() > 1500 ? 2:1;
+        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/scale, bitmap.getHeight()/scale, false);
+
 
 
         OutputStream os = null;
@@ -230,7 +233,7 @@ public class InitialHitchhikerProfileActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         if(response.equals("true\n")) {
-                            CircleImageView profilePic = (CircleImageView)findViewById(R.id.initial_driver_pp);
+                            CircleImageView profilePic = (CircleImageView)findViewById(R.id.initial_hitchhiker_pp);
                             if(pp != null){
                                 profilePic.setImageBitmap(pp);
                                 ProfileFragment.pp = pp;

@@ -352,7 +352,8 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "Image Selection Failed, Size of image too big", Toast.LENGTH_SHORT).show();
             return;
         }
-        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+        int scale = bitmap.getWidth() > 1500 ? 2:1;
+        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/scale, bitmap.getHeight()/scale, false);
 
 
         OutputStream os = null;
@@ -497,6 +498,10 @@ public class ProfileFragment extends Fragment {
         editor.putString("name", "");
 
         editor.commit();
+        User.user_id =-1;
+        User.isTripSetted = false;
+        User.userType = "";
+        ProfileFragment.pp = null;
     }
 
     public void readShared() {

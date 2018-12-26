@@ -178,7 +178,8 @@ public class DriverProfilePageActivity extends AppCompatActivity {
             Toast.makeText(this, "Image Selection Failed, Size of image too big", Toast.LENGTH_SHORT).show();
             return;
         }
-        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/2, bitmap.getHeight()/2, false);
+        int scale = bitmap.getWidth() > 1500 ? 2:1;
+        bitmap =Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/scale, bitmap.getHeight()/scale, false);
 
 
         OutputStream os = null;
