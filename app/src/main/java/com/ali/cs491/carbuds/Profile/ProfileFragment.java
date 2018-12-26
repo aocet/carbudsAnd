@@ -550,7 +550,6 @@ public class ProfileFragment extends Fragment {
                             Toast.makeText(getContext(), "Trip Cancel Failed", Toast.LENGTH_SHORT).show();
                             return;
                         }
-
                             tripStartTimeView.setVisibility(View.GONE);
                             tripStartTimeView2.setVisibility(View.GONE);
                             User.isTripSetted = false;

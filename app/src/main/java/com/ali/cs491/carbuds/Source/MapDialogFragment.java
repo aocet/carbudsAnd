@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -36,6 +37,8 @@ public class MapDialogFragment extends DialogFragment
     GoogleMap mMap;
     public static String TAG;
     private JSONObject jsonObject;
+    Marker startMarker;
+    Marker endMarker;
     public MapDialogFragment() {
         // Required empty public constructor
     }
@@ -88,13 +91,6 @@ public class MapDialogFragment extends DialogFragment
 
         LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
-//the include method will calculate the min and max bound.
-
-
-
-
-
-        //googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(polylines.get(polylines.size()-1), 15));
         polyOptions.color(Color.BLUE);
         polyOptions.width(15);
         Polyline line = googleMap.addPolyline(polyOptions);
@@ -103,14 +99,14 @@ public class MapDialogFragment extends DialogFragment
         markerOptions.position(polylines.get(0));
         markerOptions.title("Start Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA));
-        mMap.addMarker(markerOptions);
+        startMarker = mMap.addMarker(markerOptions);
         builder.include(markerOptions.getPosition());
 
         markerOptions = new MarkerOptions();
         markerOptions.position(polylines.get(polylines.size()-1));
         markerOptions.title("End Position");
         markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-        mMap.addMarker(markerOptions);
+        endMarker = mMap.addMarker(markerOptions);
         builder.include(markerOptions.getPosition());
 
         LatLngBounds bounds = builder.build();
@@ -126,6 +122,16 @@ public class MapDialogFragment extends DialogFragment
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
+        /*if (startMarker != null) {
+            startMarker.remove();
+        }
+        if (endMarker != null) {
+            endMarker.remove();
+        }*/
+
+        if (mMap != null) {
+            mMap.clear();
+        }
         SupportMapFragment mapFragment = (SupportMapFragment) getFragmentManager().findFragmentById(R.id.mapsFragment);
         final FragmentTransaction ft = getFragmentManager().beginTransaction();
         ft.detach(mapFragment);
