@@ -117,7 +117,7 @@ public class MapDialogFragment extends DialogFragment
 
         int width = getActivity().getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
-        int padding = (int) (width * 0.25); // offset from edges of the map 10% of screen
+        int padding = (int) (1500 * 0.25); // offset from edges of the map 10% of screen
 
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 1050, 1500, padding);
         mMap.moveCamera(cu);
