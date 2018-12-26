@@ -18,7 +18,8 @@
             android:text="You dont have any match yet."
             android:layout_above="@+id/empty_matchlist_button"
             android:layout_centerHorizontal="true"/>
-        <Button
+        <Button style="@style/Widget.AppCompat.Button.Colored"
+            android:background="@drawable/material_rounded_button"
             android:text="RELOAD"
             android:id="@+id/empty_matchlist_button"
             android:layout_width="wrap_content"

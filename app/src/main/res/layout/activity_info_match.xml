@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/layout">
 
         <ProgressBar
@@ -47,6 +47,15 @@
             android:src="@drawable/green"
             app:civ_border_color="#FFFFFFFF"
             app:civ_border_width="3dp" />
+
+        <Button style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/cancelMatch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2744dp"
+            android:text="Cancel Match"
+            android:layout_toRightOf="@+id/profilePicture"
+            tools:layout_editor_absoluteX="231dp" />
 
         <RelativeLayout
             android:id="@+id/profile_layout"
@@ -122,15 +131,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/preferencesView" />
 
-            <Button
-                android:id="@+id/cancelMatch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginBottom="20dp"
-                android:text="Cancel Match"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
         </android.support.constraint.ConstraintLayout>
 
 
