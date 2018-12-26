@@ -553,6 +553,7 @@ public class ProfileFragment extends Fragment {
                             tripStartTimeView.setVisibility(View.GONE);
                             tripStartTimeView2.setVisibility(View.GONE);
                             User.isTripSetted = false;
+                            refresh();
 
                     }
                     @Override
