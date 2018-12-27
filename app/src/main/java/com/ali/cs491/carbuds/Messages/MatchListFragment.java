@@ -238,8 +238,9 @@ public class MatchListFragment extends Fragment {
                 for (int i = 0; i < jsonarray.length(); i++) {
                     JSONObject jsonobject = jsonarray.getJSONObject(i);
                     int matchId = jsonobject.getInt("match_id");
-                    if(isExist(matchId)){
-                        previousMatches.remove(matchId);
+                    if(isExist(matchId) && !previousMatches.isEmpty() && previousMatches.indexOf(matchId) != -1){
+                        int index = previousMatches.indexOf(matchId);
+                        previousMatches.remove(index);
                         continue;
                     }
                     String intersectionPolyline = jsonobject.getString("intersection_polyline");
